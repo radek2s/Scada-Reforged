@@ -10,3 +10,6 @@
 
 rootProject.name = 'Scada-LTS'
 include ':scadalts-ui'
+include 'srf-core'
+include 'a'
+
