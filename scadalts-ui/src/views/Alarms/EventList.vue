@@ -420,6 +420,11 @@ export default {
 		this.mountedTs = this.$dayjs()
 		this.fetchEventList();
 	},
+	computed: {
+		alarmFlags() {
+			return this.$store.state.staticResources.alarmFlags;
+		}
+	},
 	watch: {
     	options (data) {
 			this.searchFilters.page = data.page;
@@ -578,6 +583,7 @@ export default {
 					image: "images/flag_red.png"
 				}
 			},
+			confirmAckAllToggleDialog: false,
 			confirmTitle: '',
 			confirmMessage: '',
 			selectedEvents: [],
