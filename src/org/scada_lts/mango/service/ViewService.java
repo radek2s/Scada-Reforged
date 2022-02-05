@@ -20,38 +20,37 @@ package org.scada_lts.mango.service;
 /** 
  * @author grzegorz bylica Abil'I.T. development team, sdt@abilit.eu
  */
-import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
-import java.sql.SQLException;
-import java.util.*;
 
 import br.org.scadabr.vo.exporter.util.FileUtil;
+import com.serotonin.mango.Common;
+import com.serotonin.mango.db.dao.UserDao;
 import com.serotonin.mango.view.ImageSet;
+import com.serotonin.mango.view.ShareUser;
+import com.serotonin.mango.view.View;
+import com.serotonin.mango.vo.User;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.scada_lts.dao.*;
+import org.scada_lts.dao.DAO;
+import org.scada_lts.dao.ViewDAO;
 import org.scada_lts.dao.model.IdName;
 import org.scada_lts.dao.model.ScadaObjectIdentifier;
 import org.scada_lts.permissions.service.GetShareUsers;
 import org.scada_lts.permissions.service.ViewGetShareUsers;
 import org.scada_lts.web.beans.ApplicationBeans;
-import org.scada_lts.utils.ApplicationBeans;
 import org.scada_lts.web.mvc.api.dto.ImageSetIdentifier;
 import org.scada_lts.web.mvc.api.dto.UploadImage;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
-
-import com.serotonin.mango.Common;
-import com.serotonin.mango.db.dao.UserDao;
-import com.serotonin.mango.view.ShareUser;
-import com.serotonin.mango.view.View;
-import com.serotonin.mango.vo.User;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
+import java.sql.SQLException;
+import java.util.*;
 
 @Service
 public class ViewService {
