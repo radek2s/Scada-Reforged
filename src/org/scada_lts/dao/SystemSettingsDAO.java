@@ -24,7 +24,7 @@ import com.serotonin.mango.vo.DataPointVO;
 import com.serotonin.mango.vo.User;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.scada_lts.utils.ApplicationBeans;
+import org.scada_lts.web.beans.ApplicationBeans;
 import org.scada_lts.utils.ColorUtils;
 import org.scada_lts.web.mvc.api.AggregateSettings;
 import org.springframework.dao.EmptyResultDataAccessException;
@@ -113,6 +113,9 @@ public class SystemSettingsDAO {
 
 	// SMS domain
 	public static final String SMS_DOMAIN = "sms.domain";
+
+	// Purge with values limit
+	public static final String VALUES_LIMIT_FOR_PURGE = "valuesLimitForPurge";
 
 	// Aggregation values
 	public static final String AGGREGATION_ENABLED = "aggregationEnabled";
@@ -357,7 +360,7 @@ public class SystemSettingsDAO {
 		DEFAULT_VALUES.put(FUTURE_DATE_LIMIT_PERIODS, 24);
 		DEFAULT_VALUES.put(FUTURE_DATE_LIMIT_PERIOD_TYPE,
 				Common.TimePeriods.HOURS);
-		DEFAULT_VALUES.put(INSTANCE_DESCRIPTION, "Scada-LTS - 2.5");
+		DEFAULT_VALUES.put(INSTANCE_DESCRIPTION, "Scada-LTS - 2.7.1");
 
 		DEFAULT_VALUES.put(CHART_BACKGROUND_COLOUR, "white");
 		DEFAULT_VALUES.put(PLOT_BACKGROUND_COLOUR, "white");
@@ -370,6 +373,8 @@ public class SystemSettingsDAO {
 		DEFAULT_VALUES.put(AGGREGATION_ENABLED, aggregateSettings.isEnabled());
 		DEFAULT_VALUES.put(AGGREGATION_LIMIT_FACTOR, String.valueOf(aggregateSettings.getLimitFactor()));
 		DEFAULT_VALUES.put(AGGREGATION_VALUES_LIMIT, aggregateSettings.getValuesLimit());
+
+		DEFAULT_VALUES.put(VALUES_LIMIT_FOR_PURGE, 100);
 	}
 
 	@Transactional(readOnly = false, propagation = Propagation.REQUIRES_NEW, isolation = Isolation.READ_COMMITTED, rollbackFor = SQLException.class)
