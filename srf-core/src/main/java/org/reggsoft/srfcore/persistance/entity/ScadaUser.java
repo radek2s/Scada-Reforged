@@ -1,17 +1,19 @@
-package org.reggsoft.srfcore.user;
+package org.reggsoft.srfcore.persistance.entity;
 
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import java.util.Collection;
+import javax.persistence.*;
+import java.util.*;
 
 @Entity
+@Table(name = "users")
 public class ScadaUser implements UserDetails {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private long id;
     @Column(unique = true, nullable = false)
     private String username;
     private String password;
@@ -19,6 +21,15 @@ public class ScadaUser implements UserDetails {
     private String firstName;
     private String lastName;
     private boolean enabled;
+
+    @ManyToMany
+    @JoinTable(
+            name = "users_roles",
+            joinColumns = @JoinColumn(
+                    name = "user_id", referencedColumnName = "id"),
+            inverseJoinColumns = @JoinColumn(
+                    name = "role_id", referencedColumnName = "id"))
+    private Collection<Role> roles;
 
     public ScadaUser() {
         this.enabled = true;
@@ -62,6 +73,14 @@ public class ScadaUser implements UserDetails {
         return true;
     }
 
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
+    }
+
     public void setEnabled(boolean enabled) {
         this.enabled = enabled;
     }
@@ -93,5 +112,17 @@ public class ScadaUser implements UserDetails {
 
     public void setLastName(String lastName) {
         this.lastName = lastName;
+    }
+
+//    public void setAuthorities(Set<Role> authorities) {
+//        this.authorities = authorities;
+//    }
+
+    public Collection<Role> getRoles() {
+        return roles;
+    }
+
+    public void setRoles(Collection<Role> roles) {
+        this.roles = roles;
     }
 }

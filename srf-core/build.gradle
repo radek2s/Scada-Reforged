@@ -24,6 +24,10 @@ dependencies {
 	testImplementation group: 'com.h2database', name: 'h2', version: '2.1.210'
 	implementation group: 'org.springframework.boot', name: 'spring-boot-starter-data-jpa', version: '2.6.3'
 	implementation group: 'org.springframework.boot', name: 'spring-boot-starter-data-rest', version: '2.6.3'
+	implementation 'org.springframework.security:spring-security-acl:5.6.1'
+	implementation 'org.springframework.security:spring-security-config:5.6.1'
+	implementation 'org.springframework:spring-context-support:5.3.15'
+	implementation 'net.sf.ehcache:ehcache-core:2.6.11'
 
 
 }

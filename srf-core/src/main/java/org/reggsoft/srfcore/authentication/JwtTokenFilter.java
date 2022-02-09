@@ -1,9 +1,11 @@
 package org.reggsoft.srfcore.authentication;
 
-import org.reggsoft.srfcore.user.ScadaUserService;
+import org.reggsoft.srfcore.persistance.entity.Role;
+import org.reggsoft.srfcore.services.ScadaUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Component;
@@ -13,6 +15,7 @@ import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.transaction.Transactional;
 import java.io.IOException;
 import org.springframework.http.HttpHeaders;
 import java.util.List;
@@ -44,7 +47,7 @@ public class JwtTokenFilter extends OncePerRequestFilter {
         }
 
         // Get user identity and set it on the spring security context
-        UserDetails userDetails = userService
+        User userDetails = userService
                 .loadUserByUsername(jwtTokenUtil.getUsername(token));
 
         UsernamePasswordAuthenticationToken
