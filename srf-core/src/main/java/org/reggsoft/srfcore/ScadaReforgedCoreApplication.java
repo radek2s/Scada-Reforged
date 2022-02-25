@@ -12,6 +12,7 @@ public class ScadaReforgedCoreApplication {
 		Logger log = LoggerFactory.getLogger(ScadaReforgedCoreApplication.class);
 		SpringApplication.run(ScadaReforgedCoreApplication.class, args);
 		log.info("Scada-Reforged is ruunning...");
+//		ScadaRuntime sr = new ScadaRuntime();
 	}
 
 }

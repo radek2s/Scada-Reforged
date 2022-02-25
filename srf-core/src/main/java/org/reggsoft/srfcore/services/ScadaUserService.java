@@ -1,12 +1,11 @@
 package org.reggsoft.srfcore.services;
 
-import org.reggsoft.srfcore.persistance.dao.AclSidRepository;
+
 import org.reggsoft.srfcore.persistance.dao.RoleRepository;
 import org.reggsoft.srfcore.persistance.dao.ScadaUserRepository;
 import org.reggsoft.srfcore.persistance.entity.Privilege;
 import org.reggsoft.srfcore.persistance.entity.Role;
 import org.reggsoft.srfcore.persistance.entity.ScadaUser;
-import org.reggsoft.srfcore.persistance.entity.AclSid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
