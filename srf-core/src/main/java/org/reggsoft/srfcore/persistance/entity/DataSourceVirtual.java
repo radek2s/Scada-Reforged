@@ -18,6 +18,8 @@ public class DataSourceVirtual {
     private String name;
     @Column
     private Integer updatePeriod;
+    @Column
+    private boolean enabled;
 
     public Integer getId() {
         return id;
@@ -49,5 +51,13 @@ public class DataSourceVirtual {
 
     public void setUpdatePeriod(Integer updatePeriod) {
         this.updatePeriod = updatePeriod;
+    }
+
+    public boolean isEnabled() {
+        return enabled;
+    }
+
+    public void setEnabled(boolean enabled) {
+        this.enabled = enabled;
     }
 }

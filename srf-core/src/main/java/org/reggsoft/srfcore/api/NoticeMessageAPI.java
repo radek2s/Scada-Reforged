@@ -2,7 +2,9 @@ package org.reggsoft.srfcore.api;
 
 
 import org.reggsoft.srfcore.ScadaRuntime;
+import org.reggsoft.srfcore.persistance.dao.DataSourceVirtualRepository;
 import org.reggsoft.srfcore.persistance.dao.NoticeMessageRepository;
+import org.reggsoft.srfcore.persistance.entity.DataSourceVirtual;
 import org.reggsoft.srfcore.persistance.entity.NoticeMessage;
 import org.reggsoft.srfcore.services.PermissionService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,6 +29,9 @@ public class NoticeMessageAPI {
     @Autowired
     private ApplicationContext context;
 
+    @Autowired
+    private DataSourceVirtualRepository dsRepo;
+
     @GetMapping()
     public ResponseEntity<List<NoticeMessage>> getAll() {
         return new ResponseEntity<>(repository.findAll(), HttpStatus.OK);
@@ -42,6 +47,21 @@ public class NoticeMessageAPI {
         NoticeMessage n = repository.save(noticeMessage);
         permissions.addPermission(username, NoticeMessage.class, Long.valueOf(n.getId()), BasePermission.READ);
         return new ResponseEntity<>(n, HttpStatus.CREATED);
+    }
+
+    @GetMapping("enable")
+    public ResponseEntity<String> enableDS() {
+        ScadaRuntime rt = (ScadaRuntime) context.getBean("getScadaRuntime");
+        rt.initDataSources();
+        rt.startDataSources();
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @GetMapping("disable")
+    public ResponseEntity<String> disableDS() {
+        ScadaRuntime rt = (ScadaRuntime) context.getBean("getScadaRuntime");
+        rt.stopDataSources();
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @GetMapping("start")

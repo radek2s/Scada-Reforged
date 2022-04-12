@@ -15,21 +15,27 @@ INSERT INTO system_message(id,content) VALUES
     (2,'Second Level Message'),
     (3,'Third Level Message');
 
+INSERT INTO ds_virtual(id,sid,name,update_period, enabled) VALUES
+    (1,'SID_012', 'Advanced', 5, true);
+
 INSERT INTO acl_sid (id, principal, sid) VALUES
 (1, 0, 'ROLE_ADMIN'),
 (2, 1, 'admin');
 
 INSERT INTO acl_class (id, class) VALUES
-(1, 'org.reggsoft.srfcore.persistance.entity.NoticeMessage');
+(1, 'org.reggsoft.srfcore.persistance.entity.NoticeMessage'),
+(2, 'org.reggsoft.srfcore.persistance.entity.DataSourceVirtual');
 
 
 INSERT INTO acl_object_identity (id, object_id_class, object_id_identity, parent_object, owner_sid, entries_inheriting) VALUES
 (1, 1, 1, NULL, 2, 0),
 (2, 1, 2, NULL, 2, 0),
-(3, 1, 3, NULL, 2, 0);
+(3, 1, 3, NULL, 2, 0),
+(4, 2, 1, NULL, 2, 0);
 
 INSERT INTO acl_entry (id, acl_object_identity, ace_order, sid, mask, granting, audit_success, audit_failure) VALUES
 (1, 1, 1, 2, 1, 1, 1, 0),
 (2, 2, 1, 2, 1, 1, 1, 0),
-(3, 3, 1, 2, 1, 1, 1, 0);
+(3, 3, 1, 2, 1, 1, 1, 0),
+(4, 4, 1, 2, 1, 1, 1, 0);
 
