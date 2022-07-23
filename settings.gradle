@@ -11,5 +11,4 @@
 rootProject.name = 'Scada-Reforged'
 include ':scadalts-ui'
 include 'srf-core'
-include 'a'
 
