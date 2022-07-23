@@ -1,13 +1,5 @@
 package org.reggster.srfcore.domain.datasources.virtual
 
-import org.springframework.stereotype.Component
-import java.util.Optional
+import org.reggster.srfcore.domain.datasources.ScadaDataSourceService
 
-@Component
-class DataSourceVirtualService(
-    private val dsRepository: DataSourceVirtualRepository
-) {
-    fun findById(id: Int): Optional<DataSourceVirtual> = dsRepository.findById(id)
-
-    fun save(ds: DataSourceVirtual) = dsRepository.save(ds)
-}
+interface DataSourceVirtualService: ScadaDataSourceService<DataSourceVirtual, Int> { }

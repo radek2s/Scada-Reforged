@@ -1,5 +1,7 @@
 package org.reggster.srfcore.domain.datasources.virtual
 
-import org.springframework.data.jpa.repository.JpaRepository
+import org.reggster.srfcore.domain.datasources.ScadaDataSourceRepository
+import org.springframework.stereotype.Repository
 
-interface DataSourceVirtualRepository : JpaRepository<DataSourceVirtual, Int>
+@Repository
+interface DataSourceVirtualRepository : ScadaDataSourceRepository<DataSourceVirtual, Int>
