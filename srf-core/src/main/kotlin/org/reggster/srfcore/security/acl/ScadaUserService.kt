@@ -1,6 +1,7 @@
 package org.reggster.srfcore.security.acl
 
 import org.springframework.security.acls.domain.DefaultPermissionFactory
+import org.springframework.security.acls.domain.GrantedAuthoritySid
 import org.springframework.security.acls.domain.ObjectIdentityImpl
 import org.springframework.security.acls.domain.PermissionFactory
 import org.springframework.security.acls.domain.PrincipalSid
@@ -17,38 +18,40 @@ import org.springframework.security.core.userdetails.UserDetails
 import org.springframework.security.core.userdetails.UserDetailsService
 import org.springframework.security.core.userdetails.UsernameNotFoundException
 import org.springframework.stereotype.Service
+import org.springframework.transaction.annotation.Transactional
 
 @Service("userDetailsService")
 class ScadaUserService(
     private var scadaUserRepo: ScadaUserRepo,
     private var aclService: MutableAclService,
-): UserDetailsService {
+) : UserDetailsService {
 
     private var permissionFactory: PermissionFactory = DefaultPermissionFactory()
 
     fun findAll(): Iterable<ScadaUser> = scadaUserRepo.findAll()
 
-    fun addPermission(username: String, type: Class<*>, id: Long, permission: Permission) {
-        val objectIdentity: ObjectIdentity = ObjectIdentityImpl(type, id)
-        val sid: Sid = PrincipalSid(username)
-        var acl: MutableAcl
+    @Transactional
+    fun addPermission(sid: Sid, type: Class<*>, id: Long, permissions: List<Permission>) {
+        permissions.forEach {
+            val objectIdentity: ObjectIdentity = ObjectIdentityImpl(type, id)
+            val acl: MutableAcl = try {
+                aclService.readAclById(objectIdentity) as MutableAcl
+            } catch (e: NotFoundException) {
+                aclService.createAcl(objectIdentity)
+            }
 
-        try {
-            acl = aclService.readAclById(objectIdentity) as MutableAcl
-        } catch (e: NotFoundException) {
-            acl = aclService.createAcl(objectIdentity)
+            acl.insertAce(acl.entries.size, it, sid, true)
+            aclService.updateAcl(acl)
         }
-        acl.insertAce(acl.entries.size, permission, sid, true)
-        aclService.updateAcl(acl)
     }
 
     @Throws(UsernameNotFoundException::class)
     override fun loadUserByUsername(username: String): UserDetails {
         val user = scadaUserRepo.findByUsername(username)
-            .orElseThrow { UsernameNotFoundException("User: $username")}
+            .orElseThrow { UsernameNotFoundException("User: $username") }
 
         val authorities = ArrayList<GrantedAuthority>()
-        user.roles!!.forEach { role -> authorities.add(SimpleGrantedAuthority(role.roleName))}
+        user.roles!!.forEach { role -> authorities.add(SimpleGrantedAuthority(role.roleName)) }
 
         return User(
             user.username,

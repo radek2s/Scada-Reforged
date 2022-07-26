@@ -4,10 +4,14 @@ import java.util.*
 
 interface ScadaDataSourceService<T: ScadaDataSource, ID: java.io.Serializable> {
 
-    abstract fun findAll(): List<T>
+    fun findAll(): List<T>
 
-    abstract fun findById(entityId: ID): Optional<T>
+    fun findById(entityId: ID): Optional<T>
 
-    abstract fun save(entity: T): T
+    fun save(entity: T): T
+
+    fun create(entity: T): T
+
+    fun delete(entityId: ID)
 
 }

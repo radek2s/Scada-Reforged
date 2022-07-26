@@ -7,5 +7,5 @@ import org.springframework.transaction.annotation.Transactional
 @Service
 @Transactional
 class DataSourceOtherServiceImpl(
-    private val dsRepository: DataSourceOtherRepository
+    dsRepository: DataSourceOtherRepository
 ): ScadaDataSourceRepositoryImpl<DataSourceOther, Int>(dsRepository), DataSourceOtherService

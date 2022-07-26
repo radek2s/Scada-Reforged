@@ -20,7 +20,7 @@ enum class DataSourceType {
 @MappedSuperclass
 abstract class ScadaDataSource {
     @Id @GeneratedValue
-    var id: Int? = 0
+    var id: Int = 0
     abstract var type: DataSourceType
     var sid: String = ""
     var name: String = ""

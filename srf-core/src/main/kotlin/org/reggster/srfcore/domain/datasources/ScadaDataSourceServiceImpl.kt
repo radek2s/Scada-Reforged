@@ -1,47 +1,55 @@
 package org.reggster.srfcore.domain.datasources
 
-import org.reggster.srfcore.domain.datasources.other.DataSourceOther
 import org.reggster.srfcore.domain.datasources.other.DataSourceOtherServiceImpl
-import org.reggster.srfcore.domain.datasources.virtual.DataSourceVirtual
 import org.reggster.srfcore.domain.datasources.virtual.DataSourceVirtualServiceImpl
+import org.reggster.srfcore.security.acl.ScadaUserService
 import org.springframework.context.ApplicationContext
+import org.springframework.security.acls.domain.BasePermission
+import org.springframework.security.acls.domain.PrincipalSid
 import org.springframework.stereotype.Service
+import org.springframework.transaction.annotation.Transactional
+import java.security.Principal
 import java.util.*
 
 @Service
 class ScadaDataSourceServiceImpl(
-    val ctx: ApplicationContext
-): ScadaDataSourceService<ScadaDataSource, Int> {
+    val ctx: ApplicationContext,
+    private val userService: ScadaUserService
+) {
 
-    //ToDo: Create a factory method and get rid of sub-controller
-    // Factory method should decide which Service to use based on DS "type"
-    // Generic method for findAll, getOne, save, update, etc.
-    // More sophisticated methods should be implemented per datasource
-    override fun findAll(): List<ScadaDataSource> {
+    fun findAll(): List<ScadaDataSource> {
         val dsList: MutableList<ScadaDataSource> = mutableListOf()
-        dsList.addAll(ctx.getBean(DataSourceVirtualServiceImpl::class.java).findAll())
-        dsList.addAll(ctx.getBean(DataSourceOtherServiceImpl::class.java).findAll())
-
+        getAllServiceBeans().forEach { dsList.addAll(it.findAll()) }
         return dsList.toList()
     }
 
-    override fun save(entity: ScadaDataSource): ScadaDataSource =
-        when (entity.type) {
-            DataSourceType.VIRTUAL
-            -> ctx.getBean(DataSourceVirtualServiceImpl::class.java).save(entity as DataSourceVirtual)
-            DataSourceType.OTHER
-            -> ctx.getBean(DataSourceOtherServiceImpl::class.java).save(entity as DataSourceOther)
-        }
+    @Transactional
+    fun save(entity: ScadaDataSource, principal: Principal): ScadaDataSource =
+        getServiceBean(entity.type).save(entity)
 
     fun findById(entityId: Int, type: DataSourceType): Optional<ScadaDataSource> =
-        when (type) {
-            DataSourceType.VIRTUAL
-                -> ctx.getBean(DataSourceVirtualServiceImpl::class.java).findById(entityId) as Optional<ScadaDataSource>
-            DataSourceType.OTHER
-                -> ctx.getBean(DataSourceOtherServiceImpl::class.java).findById(entityId) as Optional<ScadaDataSource>
-    }
+        getServiceBean(type).findById(entityId)
 
-    override fun findById(entityId: Int): Optional<ScadaDataSource> {
-        TODO("Not yet implemented")
-    }
+    fun delete(entityId: Int, type: DataSourceType) =
+        getServiceBean(type).delete(entityId)
+
+    fun create(entity: ScadaDataSource, principal: Principal): ScadaDataSource =
+        getServiceBean(entity.type).create(entity).also { addBasicPermissions(it, principal) }
+
+    // --- DATA-SOURCES DEFINITIONS :: Extend in this place --- //
+    private fun getServiceBean(type: DataSourceType): ScadaDataSourceService<ScadaDataSource, Int> =
+        when (type) {
+            DataSourceType.VIRTUAL -> ctx.getBean(DataSourceVirtualServiceImpl::class.java) as ScadaDataSourceService<ScadaDataSource, Int>
+            DataSourceType.OTHER -> ctx.getBean(DataSourceOtherServiceImpl::class.java) as ScadaDataSourceService<ScadaDataSource, Int>
+        }
+
+    private fun getAllServiceBeans(): List<ScadaDataSourceService<ScadaDataSource, Int>> =
+        listOf(
+            ctx.getBean(DataSourceVirtualServiceImpl::class.java) as ScadaDataSourceService<ScadaDataSource, Int>,
+            ctx.getBean(DataSourceOtherServiceImpl::class.java) as ScadaDataSourceService<ScadaDataSource, Int>
+        )
+
+    private fun addBasicPermissions(datasource: ScadaDataSource, principal: Principal) =
+        userService.addPermission(PrincipalSid(principal.name), datasource.javaClass, datasource.id.toLong(), listOf(BasePermission.READ, BasePermission.WRITE))
+
 }

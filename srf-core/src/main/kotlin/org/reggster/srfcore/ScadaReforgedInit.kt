@@ -27,10 +27,7 @@ class ScadaReforgedInit(
         val adminUser = ScadaUser(
             1, "admin", passwordEncoder.encode("admin"), "Bilbo"
         )
-        adminUser.roles = setOf(
-            roleRepository.findByRoleName("ROLE_ADMIN").get(),
-            roleRepository.findByRoleName("ROLE_USER").get(),
-            roleRepository.findByRoleName("ROLE_GUEST").get())
+        adminUser.roles = setOf(roleRepository.findByRoleName("ROLE_ADMIN").get())
         userRepository.save(adminUser)
 
         val standardUser = ScadaUser(
@@ -39,12 +36,19 @@ class ScadaReforgedInit(
         standardUser.roles = setOf(roleRepository.findByRoleName("ROLE_USER").get())
         userRepository.save(standardUser)
 
+        val mgmtUser = ScadaUser(
+            3, "mgmt", passwordEncoder.encode("mgmt"), "Manager"
+        )
+        mgmtUser.roles = setOf(roleRepository.findByRoleName("ROLE_MGMT").get())
+        userRepository.save(mgmtUser)
+
     }
 
     private fun createRoles() {
         createRole(1, "ROLE_ADMIN", "Execute all")
-        createRole(2, "ROLE_USER", "Standard execution")
-        createRole(3, "ROLE_GUEST", "Anonymous access")
+        createRole(2, "ROLE_MGMT", "DataSource manager")
+        createRole(3, "ROLE_USER", "Standard execution")
+        createRole(4, "ROLE_GUEST", "Anonymous access")
     }
 
     @Transactional
