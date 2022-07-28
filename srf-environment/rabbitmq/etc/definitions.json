@@ -1,0 +1,54 @@
+{
+  "users": [
+    {
+      "name": "scadareforged",
+      "password_hash": "4ddhd9kr7mRfiKCLJ1jtJV/XpTq6dTOK4Sle7Kvwm6x2R7MD",
+      "hashing_algorithm": "rabbit_password_hashing_sha256",
+      "tags": "administrator"
+    }
+  ],
+  "vhosts": [
+    {
+      "name": "/"
+    }
+  ],
+  "permissions": [
+    {
+      "user":"scadareforged",
+      "vhost":"/",
+      "configure":".*",
+      "write":".*",
+      "read":".*"
+    }
+  ],
+  "queues":[
+    {
+      "name":"datasource.values",
+      "vhost":"/",
+      "durable":true,
+      "auto_delete":true,
+      "arguments":{}
+    }
+  ],
+  "exchanges":[
+    {
+      "name":"scada_reforged",
+      "type":"direct",
+      "vhost":"/",
+      "durable":true,
+      "auto_delete":false,
+      "internal":false,
+      "arguments":{}
+    }
+  ],
+  "bindings":[
+    {
+      "source":"scada_reforged",
+      "vhost":"/",
+      "destination":"datasource.values",
+      "destination_type":"queue",
+      "routing_key":"values",
+      "arguments":{}
+    }
+  ]
+}

@@ -1,0 +1,27 @@
+version: "3.7"
+services:
+
+  rabbitmq:
+    image: rabbitmq:3-management
+    ports:
+      - 5672:5672
+      - 15672:15672
+    environment:
+      RABBITMQ_ERLANG_COOKIE: "secret_string"
+    volumes:
+      - "./srf-environment/rabbitmq/etc/:/etc/rabbitmq/"
+      - "./srf-environment/rabbitmq/data/:/var/lib/rabbitmq/"
+
+  influxdb:
+    image: influxdb:latest
+    restart: always
+    ports:
+      - 8086:8086
+    environment:
+      - INFLUXDB_ADMIN_USER=influx
+      - INFLUXDB_ADMIN_PASSWORD=influx
+      - INFLUXDB_DB=scadareforged
+    volumes:
+      - "./srf-environment/influxdb/data/:/var/lib/influxdb"
+
+

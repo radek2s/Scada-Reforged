@@ -59,6 +59,9 @@ class ScadaReforgedInit(
             }
         )
 
-
+//https://github.com/influxdata/influxdb-client-java/blob/master/examples/src/main/java/example/KotlinWriteApi.kt
+    //Influx point entity to store
+    //Bucket creation
+    //https://github.com/influxdata/influxdb-client-java#use-management-api-to-create-a-new-bucket-in-influxdb-2x
 
 }

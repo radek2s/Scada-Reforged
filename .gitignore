@@ -31,7 +31,6 @@ Desktop.ini
 ######################
 # OSX
 ######################
-.DS_Store
 .svn
 # Thumbnails
 ._*
@@ -99,14 +98,12 @@ docker/app/**
 # intelij
 ###########################
 .idea
-scadabr-1.1.0-RC.iml
-scadabr-1.1.0-RC_.iml
+
 
 ###########################
 # jrebel
 ###########################
 catalina-jrebel.bat
-scadabr-1.1.0-RC.iml
 # Ignore Gradle project-specific cache directory
 .gradle
 gradle/
@@ -118,3 +115,5 @@ databases
 TEST*.xml
 gradlew
 gradlew.bat
+
+srf-environment/rabbitmq/data/
