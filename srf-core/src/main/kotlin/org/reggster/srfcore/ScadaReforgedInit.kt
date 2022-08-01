@@ -1,5 +1,6 @@
 package org.reggster.srfcore
 
+import org.reggster.srfcore.domain.data.InfluxDbService
 import org.reggster.srfcore.security.acl.ScadaUser
 import org.reggster.srfcore.security.acl.ScadaUserRepo
 import org.reggster.srfcore.security.acl.Role
@@ -14,7 +15,8 @@ import org.springframework.transaction.annotation.Transactional
 class ScadaReforgedInit(
     private val userRepository: ScadaUserRepo,
     private val roleRepository: RoleRepository,
-    private val passwordEncoder: PasswordEncoder
+    private val passwordEncoder: PasswordEncoder,
+    private val influxService: InfluxDbService
 ) : ApplicationListener<ContextRefreshedEvent> {
 
     var initialized: Boolean = false
@@ -41,6 +43,9 @@ class ScadaReforgedInit(
         )
         mgmtUser.roles = setOf(roleRepository.findByRoleName("ROLE_MGMT").get())
         userRepository.save(mgmtUser)
+
+        influxService.getPoint()
+        influxService.getPoint()
 
     }
 

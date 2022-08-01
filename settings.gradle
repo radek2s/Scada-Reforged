@@ -11,4 +11,9 @@
 rootProject.name = 'Scada-Reforged'
 include ':scadalts-ui'
 include 'srf-core'
+include 'srf-ds'
+include 'srf-ds-modbus-ip'
+include 'srf-ds-commons'
+include 'srf-ds-virtual'
+include 'srf-commons'
 
