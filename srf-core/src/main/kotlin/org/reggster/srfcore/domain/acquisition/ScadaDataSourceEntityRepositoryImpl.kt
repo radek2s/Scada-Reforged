@@ -26,7 +26,6 @@ abstract class ScadaDataSourceEntityRepositoryImpl<T: ScadaDataSourceEntity, ID:
         scadaDataSourceEntityRepository.findAll()
 
     @PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_MGMT','ROLE_USER')")
-    @PostFilter("hasPermission(filterObject, 'READ') or hasRole('ROLE_ADMIN')")
     override fun findById(entityId: ID): Optional<T> =
         scadaDataSourceEntityRepository.findById(entityId)
 

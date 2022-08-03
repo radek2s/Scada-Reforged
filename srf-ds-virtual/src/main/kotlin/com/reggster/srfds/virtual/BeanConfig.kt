@@ -1,10 +1,11 @@
-package org.reggster.srfcore
+package com.reggster.srfds.virtual
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.module.kotlin.KotlinModule
+import org.springframework.amqp.rabbit.connection.ConnectionFactory
+import org.springframework.amqp.rabbit.core.RabbitTemplate
 import org.springframework.amqp.support.converter.Jackson2JsonMessageConverter
 import org.springframework.amqp.support.converter.MessageConverter
-import org.springframework.boot.web.client.RestTemplateBuilder
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.scheduling.annotation.EnableScheduling
@@ -18,5 +19,9 @@ class BeanConfig {
         Jackson2JsonMessageConverter(ObjectMapper().registerModule(KotlinModule()))
 
     @Bean
-    fun restTemplate(builder: RestTemplateBuilder) = builder.build()
+    fun rabbitTemplate(connectionFactory: ConnectionFactory) =
+        RabbitTemplate(connectionFactory).apply {
+            messageConverter = jsonConventer()
+        }
+
 }

@@ -1,5 +1,6 @@
 package com.reggster.srfds.virtual.runtime
 
+import com.reggster.srfds.virtual.model.DataPointVirtualRT
 import com.reggster.srfds.virtual.model.DataSourceVirtualRT
 import org.springframework.stereotype.Service
 
@@ -45,6 +46,18 @@ class RuntimeService {
 
     fun getCurrentValueById(id: Int): Int? {
         return dataSources.find { it.id == id }?.value
+    }
+
+    fun addDataPoint(dsId: Int, dp: DataPointVirtualRT) {
+        dataSources.find { it.id == dsId }.also {
+            it?.addDataPoint(dp)
+        }
+    }
+
+    fun toggleDataPoint(dsId: Int, dpId: Int) {
+        dataSources.find { it.id == dsId }.also {
+            it?.toggleDataPoint(dpId)
+        }
     }
 
 }

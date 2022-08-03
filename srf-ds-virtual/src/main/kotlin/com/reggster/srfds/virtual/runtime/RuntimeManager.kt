@@ -22,7 +22,12 @@ class RuntimeManager(
                 println("Polling datasources")
                 runtimeService.dataSources.forEach {
                     println("Sending messages")
-                    messagePublisher.publishEvent("scada_test","values", it.value.toString())
+                    it.datapoints.forEach { dp ->
+                        messagePublisher.publishEvent("scada_test", "values", object {
+                            var name = dp.name
+                            var value = dp.value
+                        })
+                    }
                 }
                 Thread.sleep(5000)
             }

@@ -8,6 +8,10 @@ import org.springframework.amqp.support.AmqpHeaders
 import org.springframework.messaging.handler.annotation.Header
 import org.springframework.stereotype.Service
 
+data class ValueObj(
+    var name: String,
+    var value: Int
+)
 @EnableRabbit
 @Service
 class MessageReceiver(
@@ -15,10 +19,11 @@ class MessageReceiver(
 ) {
 
     @RabbitListener(queues = ["datasource.values"], messageConverter = "jsonConventer")
-    fun onNewDataSourceValue(id: Int, channel:Channel, @Header(AmqpHeaders.DELIVERY_TAG) tag: Long) =
+    fun onNewDataSourceValue(value: ValueObj, channel:Channel, @Header(AmqpHeaders.DELIVERY_TAG) tag: Long) =
         try {
             channel.basicAck(tag, false)
-            influxDbService.getPoint()
+            println("${value.name}:${value.value}")
+            //TODO: Save that value to influxDB
         } catch (e :Exception) {
             channel.basicReject(tag, false)
             e.printStackTrace()

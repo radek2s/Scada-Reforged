@@ -1,6 +1,8 @@
 package org.reggster.srfcore.domain.acquisition
 
 import org.reggster.srfcommons.acquisition.ScadaDataSourceType
+import org.reggster.srfcore.domain.acquisition.virtual.DataPointVirtualEntity
+import org.reggster.srfcore.domain.acquisition.virtual.DataSourceVirtualEntity
 import org.reggster.srfcore.domain.acquisition.virtual.DataSourceVirtualServiceImplEntity
 import org.reggster.srfcore.security.acl.ScadaUserService
 import org.springframework.context.ApplicationContext
@@ -14,7 +16,8 @@ import java.util.*
 @Service
 class ScadaDataSourceEntityServiceImpl(
     val ctx: ApplicationContext,
-    private val userService: ScadaUserService
+    private val userService: ScadaUserService,
+    private val runtimeDsService: RuntimeDataSourceServices
 ) {
 
     fun findAll(): List<ScadaDataSourceEntity> {
@@ -36,6 +39,22 @@ class ScadaDataSourceEntityServiceImpl(
     fun create(entity: ScadaDataSourceEntity, principal: Principal): ScadaDataSourceEntity =
         getServiceBean(entity.type).create(entity).also { addBasicPermissions(it, principal) }
 
+    fun createDataPoint(dsId: Int, type: ScadaDataSourceType, entity: DataPointVirtualEntity, principal: Principal): ScadaDataSourceEntity {
+        val ds = findById(dsId, type).get()
+        ds.datapoints?.add(entity)
+        save(ds, principal)
+        return ds
+    }
+
+    fun initRT(dsId: Int, type: ScadaDataSourceType) {
+        val ds = findById(dsId, type).get()
+        runtimeDsService.initDataSource(ds as DataSourceVirtualEntity)
+    }
+
+    fun addRTDataPoints(dsId: Int, type: ScadaDataSourceType) {
+
+    }
+
     // --- DATA-SOURCES DEFINITIONS :: Extend in this place --- //
     private fun getServiceBean(type: ScadaDataSourceType): ScadaDataSourceEntityService<ScadaDataSourceEntity> =
         when (type) {
@@ -52,5 +71,7 @@ class ScadaDataSourceEntityServiceImpl(
 
     private fun addBasicPermissions(datasource: ScadaDataSourceEntity, principal: Principal) =
         userService.addPermission(PrincipalSid(principal.name), datasource.javaClass, datasource.id.toLong(), listOf(BasePermission.READ, BasePermission.WRITE))
+
+
 
 }

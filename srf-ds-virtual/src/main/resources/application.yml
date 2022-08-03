@@ -1,0 +1,11 @@
+server:
+  port: 8081
+
+spring:
+  rabbitmq:
+    host: localhost
+    username: scadareforged
+    password: scadareforged
+    listener:
+      simple:
+        acknowledge-mode: manual

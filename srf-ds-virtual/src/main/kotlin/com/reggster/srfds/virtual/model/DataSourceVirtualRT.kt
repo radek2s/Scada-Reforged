@@ -2,7 +2,6 @@ package com.reggster.srfds.virtual.model
 
 import org.reggster.srfcommons.acquisition.ScadaDataSourceType
 import org.reggster.srfcommons.acquisition.virtual.DataSourceVirtual
-import java.util.*
 
 class DataSourceVirtualRT(
     override val type: ScadaDataSourceType,
@@ -12,9 +11,11 @@ class DataSourceVirtualRT(
     override var enabled: Boolean,
     override var updatePeriod: Int,
     override var updatePeriodType: Int,
+    var datapoints: MutableList<DataPointVirtualRT> = mutableListOf(),
     var value: Int
 ) : DataSourceVirtual, Runnable {
     private lateinit var worker: Thread
+
 
     fun interrupt() {
         enabled = false
@@ -26,11 +27,25 @@ class DataSourceVirtualRT(
         worker.start()
     }
 
+    fun addDataPoint(dp: DataPointVirtualRT) {
+        datapoints.add(dp)
+    }
+
+    fun toggleDataPoint(dpId: Int) {
+        datapoints.find { it.id == dpId }.apply {
+            if(this != null) {
+                this.enabled = !this.enabled
+            }
+        }
+    }
+
     override fun run() {
         while (enabled) {
             try {
-                value = Random().nextInt(0, 100)
-                println("${name}:${value}")
+                datapoints.forEach {
+                    it.change()
+                    println("${name}-${it.name}:${it.value}")
+                }
                 Thread.sleep(updatePeriod * updatePeriodType * 1000L)
             } catch (e:Exception) {
                 Thread.currentThread().interrupt()

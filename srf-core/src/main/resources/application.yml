@@ -1,0 +1,71 @@
+server:
+  port: 8080
+
+influxdb:
+  url: http://localhost:8086
+  token: NrAjMpE-qgXC6xD15peSINAxWFEgzqxLPSO4l45HcbaLj2k2LFe0apGEzxLwMW187UvC3GK6azCDOCi2heD4hg==
+  organization: scadareforged
+  bucket: datasources
+
+jwt-security:
+  secret: PseudoSecret-Pseudosecret-Please-Use-Ur-Own-Key-PseudoSecret-Pseudosecret
+  expiration-time: 365
+
+security:
+  password-encoder:
+    security-strength: 12
+
+auth0:
+  audience: scada
+
+scada:
+  service:
+    virtual:
+      url: localhost:8081
+
+logging:
+  level:
+   org:
+    springframework:
+      aop: DEBUG
+      security:
+        acls:
+          AclPermissionEvaluator: DEBUG
+
+spring:
+  main:
+    allow-bean-definition-overriding: true
+  h2:
+    console:
+      enabled: true
+  sql:
+    init:
+      mode: always
+  jpa:
+    hibernate:
+      ddl-auto: update
+#    defer-datasource-initialization: true
+  datasource:
+    username: admin
+    password: pass1234
+    platform: h2
+    url: jdbc:h2:mem:db
+    #    url: jdbc:h2:mem:db;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE
+    #    url: jdbc:h2:file:~/scada
+    driverClassName: org.h2.Driver
+    initialization-mode: always
+
+  rabbitmq:
+    host: localhost
+    username: scadareforged
+    password: scadareforged
+    listener:
+      simple:
+        acknowledge-mode: manual
+
+  security:
+    user:
+      name: administrator
+      password: password
+    filter:
+      order: 10
