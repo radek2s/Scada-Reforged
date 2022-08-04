@@ -24,6 +24,8 @@ class RuntimeManager(
                     println("Sending messages")
                     it.datapoints.forEach { dp ->
                         messagePublisher.publishEvent("scada_test", "values", object {
+                            var dsId = it.id
+                            var dpId = dp.id
                             var name = dp.name
                             var value = dp.value
                         })

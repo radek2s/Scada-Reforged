@@ -43,10 +43,6 @@ class ScadaReforgedInit(
         )
         mgmtUser.roles = setOf(roleRepository.findByRoleName("ROLE_MGMT").get())
         userRepository.save(mgmtUser)
-
-        influxService.getPoint()
-        influxService.getPoint()
-
     }
 
     private fun createRoles() {

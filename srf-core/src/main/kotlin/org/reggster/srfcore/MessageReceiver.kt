@@ -9,6 +9,8 @@ import org.springframework.messaging.handler.annotation.Header
 import org.springframework.stereotype.Service
 
 data class ValueObj(
+    var dsId: Int,
+    var dpId: Int,
     var name: String,
     var value: Int
 )
@@ -22,7 +24,8 @@ class MessageReceiver(
     fun onNewDataSourceValue(value: ValueObj, channel:Channel, @Header(AmqpHeaders.DELIVERY_TAG) tag: Long) =
         try {
             channel.basicAck(tag, false)
-            println("${value.name}:${value.value}")
+            println("Received from: ${value.name}")
+            influxDbService.savePointValue(value.dsId, value.dpId, value.value)
             //TODO: Save that value to influxDB
         } catch (e :Exception) {
             channel.basicReject(tag, false)
