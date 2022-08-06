@@ -32,7 +32,7 @@ class AuthController(
                 UsernamePasswordAuthenticationToken(username, password)
             )
             val user: User = auth.principal as User
-            ResponseEntity.ok().header(HttpHeaders.AUTHORIZATION, jwtTokenUtils.generateAccessToken(username)).body("HI")
+            ResponseEntity.ok().header(HttpHeaders.AUTHORIZATION, jwtTokenUtils.generateAccessToken(username)).body("{\"status\":\"HI\"}")
         } catch (e: BadCredentialsException) {
             ResponseEntity.status(HttpStatus.UNAUTHORIZED).build()
         }
