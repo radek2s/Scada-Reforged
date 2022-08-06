@@ -19,7 +19,7 @@ export default class LoginComponent {
 
     login() {
         this.authService.login(this.username, this.password).then(() => {
-            this.router.navigateByUrl("/")
+            this.router.navigateByUrl("/home")
         })
 
     }

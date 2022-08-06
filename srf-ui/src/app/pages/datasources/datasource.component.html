@@ -1,0 +1,40 @@
+
+
+<div class="login-wrapper">
+    <mat-card class="login-card">
+        <mat-card-title>Create VDS</mat-card-title>
+        <mat-card-content class="login-box">
+            <mat-form-field appearance="fill">
+                <mat-label>Name</mat-label>
+                <input type="text" matInput  [(ngModel)]="ds.name">
+              </mat-form-field>
+              <mat-form-field appearance="fill">
+                <mat-label>ScadaID</mat-label>
+                <input type="text" matInput  [(ngModel)]="ds.sid">
+              </mat-form-field>
+              <mat-form-field appearance="fill">
+                <mat-label>Update Period</mat-label>
+                <input type="number" matInput  [(ngModel)]="ds.updatePeriod">
+              </mat-form-field>
+              <mat-form-field appearance="fill">
+                <mat-label>Update Period Type</mat-label>
+                <input type="number" matInput  [(ngModel)]="ds.updatePeriodType">
+              </mat-form-field>
+
+              <section>
+                <div *ngFor="let item of dsList">
+                    <p>{{item.name}}</p>
+                    <button mat-button (click)="this.createDp(item)">Add DP</button>
+                    <button mat-button (click)="this.enable(item)">Enable</button>
+                </div>
+              </section>
+
+              
+            
+        </mat-card-content>
+        <mat-card-actions>
+            <button mat-button (click)="this.generateNew()">Generate</button>
+            <button mat-button (click)="this.createDs()">Send</button>
+        </mat-card-actions>
+    </mat-card>
+</div>

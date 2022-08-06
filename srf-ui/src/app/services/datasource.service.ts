@@ -1,7 +1,7 @@
 import { Injectable } from "@angular/core";
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { firstValueFrom } from "rxjs";
-import { VirtualDataSource } from "../pages/home/virtual";
+import { VirtualDataSource } from "../pages/datasources/virtual";
 import AuthenticationService from "../auth/auth.service";
 
 @Injectable({
@@ -21,6 +21,18 @@ export default class DataSourceService {
     }
 
     public async getAllDataSources() {
-        return await this.http.get<any>(`${this.dataSourceApi}`, { headers: this.authService.getHeaders() }).toPromise()
+        return await this.http.get<VirtualDataSource[]>(`${this.dataSourceApi}`, { headers: this.authService.getHeaders() }).toPromise()
+    }
+
+    public async addDP(dsId: number, type: string, datapoint: any) {
+        return await this.http.post<any>(`${this.dataSourceApi}/${dsId}?t=${type}`, datapoint, { headers: this.authService.getHeaders() }).toPromise()
+    }
+
+    public async initDS(dsId: number, type: string) {
+        return await this.http.get(`${this.dataSourceApi}/${dsId}/init?t=${type}`, { headers: this.authService.getHeaders() }).toPromise()
+    }
+
+    public async getValues(dsId: number, dpId: number) {
+        return await this.http.get(`/api/v1/pv?dsId=${dsId}&dpId=${dpId}`, { headers: this.authService.getHeaders() }).toPromise()
     }
 }

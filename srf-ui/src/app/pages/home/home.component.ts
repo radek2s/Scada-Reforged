@@ -1,7 +1,7 @@
 import { Component, OnInit } from "@angular/core";
 import AuthenticationService from "src/app/auth/auth.service";
 import DataSourceService from "src/app/services/datasource.service";
-import { VirtualDataSource } from "./virtual";
+import { VirtualDataSource } from "../datasources/virtual";
 
 @Component({
     selector: 'home-component',
@@ -11,6 +11,12 @@ export default class HomeComponent implements OnInit {
 
     username: string = ''
     password: string = ''
+
+    dsId: number = 8
+    dpId: number = 1
+
+    pointValues?: any[]
+
 
     constructor(
         private dsService: DataSourceService,
@@ -26,10 +32,22 @@ export default class HomeComponent implements OnInit {
     }
 
     loadDs(): void {
-        this.dsService.getAllDataSources().then(() => {
-            console.log("Requested")
+        this.dsService.getAllDataSources().then((ds) => {
+            console.log(ds)
         })
     }
+
+    getValues() {
+        this.dsService.getValues(this.dsId, this.dpId).then((r) => {
+            if(r) {
+                this.pointValues = (r as any[]).map(i => { return {time: new Date(i.time).getTime(), value: i.value }})
+            }
+            console.log(r)
+        })
+
+    }
+
+
 
     createDs(): void {
         const ds = new VirtualDataSource("Example")
