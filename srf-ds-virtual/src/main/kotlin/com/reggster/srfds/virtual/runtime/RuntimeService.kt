@@ -1,16 +1,21 @@
 package com.reggster.srfds.virtual.runtime
 
+import com.reggster.srfds.virtual.RabbitMessagePublisher
 import com.reggster.srfds.virtual.model.DataPointVirtualRT
 import com.reggster.srfds.virtual.model.DataSourceVirtualRT
 import org.springframework.stereotype.Service
 
 @Service
-class RuntimeService {
+class RuntimeService(
+    private val messagePublisher: RabbitMessagePublisher
+) {
 
     var dataSources: MutableList<DataSourceVirtualRT> = mutableListOf()
+    var threads: MutableList<DataSourceThread> = mutableListOf()
 
     fun addDataSource(ds: DataSourceVirtualRT) {
-        dataSources.add(ds)
+//        val ds = .setRabbit(messagePublisher)
+        dataSources.add(ds.apply { setRabbit(messagePublisher) })
     }
 
     fun removeDataSource(id: Int) {
@@ -22,15 +27,25 @@ class RuntimeService {
     fun enableAll() {
         dataSources.forEach {
             it.enabled = true
-            it.start()
+            val t: DataSourceThread = DataSourceThread(it)
+            threads.add(t)
+            t.start()
+//            threads.add(DataSourceThread(it))
+//            it.start()
         }
     }
 
     fun enableById(id: Int) {
         dataSources.find { it.id == id }.also {
-            if(it != null) {
+            if(it != null && !it.enabled) {
                 it.enabled = true
-                it.start()
+                val th = DataSourceThread(it)
+
+                threads.add(th)
+                th.start()
+
+//                threads.add()
+//                it.start()
             }
         }
     }
@@ -38,8 +53,12 @@ class RuntimeService {
     fun disableById(id: Int) {
         dataSources.find { it.id == id }.also {
             if(it != null) {
+                val th = threads.find { th -> th.id == it.id }
+                if(th != null) {
+                    th.interrupt()
+                    threads.remove(th)
+                }
                 it.enabled = false
-                it.interrupt()
             }
         }
     }

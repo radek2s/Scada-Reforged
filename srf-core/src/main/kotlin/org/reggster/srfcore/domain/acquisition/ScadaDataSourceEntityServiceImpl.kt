@@ -2,7 +2,6 @@ package org.reggster.srfcore.domain.acquisition
 
 import org.reggster.srfcommons.acquisition.ScadaDataSourceType
 import org.reggster.srfcore.domain.acquisition.virtual.DataPointVirtualEntity
-import org.reggster.srfcore.domain.acquisition.virtual.DataSourceVirtualEntity
 import org.reggster.srfcore.domain.acquisition.virtual.DataSourceVirtualServiceImplEntity
 import org.reggster.srfcore.security.acl.ScadaUserService
 import org.springframework.context.ApplicationContext
@@ -48,8 +47,11 @@ class ScadaDataSourceEntityServiceImpl(
 
     fun initRT(dsId: Int, type: ScadaDataSourceType) {
         val ds = findById(dsId, type).get()
-        runtimeDsService.initDataSource(ds as DataSourceVirtualEntity)
+        runtimeDsService.initDataSource(ds)
     }
+
+    fun enableRT(id: Int) =
+        runtimeDsService.enableDataSource(id)
 
     fun addRTDataPoints(dsId: Int, type: ScadaDataSourceType) {
 

@@ -1,7 +1,6 @@
 package org.reggster.srfcore.domain.acquisition
 
 import org.reggster.srfcommons.acquisition.virtual.DataSourceVirtual
-import org.reggster.srfcore.domain.acquisition.virtual.DataSourceVirtualEntity
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.stereotype.Component
@@ -17,10 +16,14 @@ class RuntimeDataSourceServices {
     @Autowired
     lateinit var restTemplate: RestTemplate
 
-    fun initDataSource(ds: DataSourceVirtualEntity) =
+    fun initDataSource(ds: ScadaDataSourceEntity) =
         restTemplate.postForObject(
-            UriComponentsBuilder.fromUriString("http:${virtualRuntimeServiceUrl}/api/v1/runner").build().encode().toUri(), ds, DataSourceVirtual::class.java)
+            UriComponentsBuilder.fromUriString("http:${virtualRuntimeServiceUrl}/api/v1/runner").build().encode().toUri(), ds as DataSourceVirtual, String.javaClass)
             .also { println("Sent") }
 
-//    fun addAll()
+    fun enableDataSource(id: Int) =
+        restTemplate.getForObject(
+            UriComponentsBuilder.fromUriString("http:${virtualRuntimeServiceUrl}/api/v1/runner/${id}/enable").build().encode().toUri(),
+            String.javaClass
+        )
 }

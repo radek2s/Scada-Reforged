@@ -5,6 +5,7 @@ import com.influxdb.client.InfluxDBClientFactory
 import com.influxdb.client.WriteApiBlocking
 import com.influxdb.client.domain.WritePrecision
 import com.influxdb.client.write.Point
+import org.reggster.srfcommons.async.PointValue
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.stereotype.Service
 import java.time.Instant
@@ -47,8 +48,13 @@ class InfluxDbService {
             val res = client.queryApi.query(querry)
             res.forEach { iti ->
                 iti.records.forEach {
-                    results.add(PointValue(dpId, it.time, it.value as Long))
-                    println("${it.time} ${it.measurement}: ${it.field}=${it.value}")
+                    println("${it.time} ${it.measurement}: ${it.field}=${it.value} DS:${it.getValueByKey("datasource")}")
+                    results.add(PointValue(
+                        dpId,
+                        1,
+                        (it.value as Long).toInt(),
+                        it.time?.toEpochMilli()
+                    ))
                 }
             }
             return results.toList()
@@ -58,13 +64,14 @@ class InfluxDbService {
         }
     }
 
-    fun savePointValue(dsId: Int, dpId: Int, value: Int) {
+    fun savePointValue(dsId: Int, dpId: Int, value: Int, time: Instant?) {
         try {
+            val t: Instant = time ?: Instant.now()
             val point: Point = Point.measurement("point_values")
                 .addTag("datasource", "$dsId")
                 .addTag("datapoint", "$dpId")
                 .addField("value", value)
-                .time(Instant.now().toEpochMilli(), WritePrecision.MS)
+                .time(t.toEpochMilli(), WritePrecision.MS)
 
 
             val writeApi: WriteApiBlocking = client.writeApiBlocking

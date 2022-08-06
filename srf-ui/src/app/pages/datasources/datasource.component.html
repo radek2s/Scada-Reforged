@@ -5,7 +5,7 @@
         <mat-card-title>Create VDS</mat-card-title>
         <mat-card-content class="login-box">
             <mat-form-field appearance="fill">
-                <mat-label>Name</mat-label>
+                <mat-label>description</mat-label>
                 <input type="text" matInput  [(ngModel)]="ds.name">
               </mat-form-field>
               <mat-form-field appearance="fill">
@@ -26,6 +26,7 @@
                     <p>{{item.name}}</p>
                     <button mat-button (click)="this.createDp(item)">Add DP</button>
                     <button mat-button (click)="this.enable(item)">Enable</button>
+                    <button mat-button (click)="this.start(item)">Start</button>
                 </div>
               </section>
 

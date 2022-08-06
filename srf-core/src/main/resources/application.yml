@@ -41,6 +41,9 @@ spring:
   sql:
     init:
       mode: always
+  jackson:
+    mapper:
+      accept-case-insensitive-enums: true
   jpa:
     hibernate:
       ddl-auto: update

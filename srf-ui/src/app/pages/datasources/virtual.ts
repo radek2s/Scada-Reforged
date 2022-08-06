@@ -13,7 +13,7 @@ export class VirtualDataSource {
         this.id = -1
         this.sid = ""
         this.name = name
-        this.enabled = true
+        this.enabled = false
         this.updatePeriod = 1
         this.updatePeriodType = 5
     }

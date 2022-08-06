@@ -1,5 +1,6 @@
 package com.reggster.srfds.virtual
 
+import org.reggster.srfcommons.async.PointValue
 import org.springframework.amqp.rabbit.core.RabbitTemplate
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
@@ -10,7 +11,13 @@ class RabbitMessagePublisher {
     @Autowired
     lateinit var rabbitTemplate: RabbitTemplate
 
-    fun publishEvent(exchange: String, routingKey: String, message: Any) {
-        rabbitTemplate.convertAndSend(exchange,routingKey, message)
-    }
+    //Publish value
+    fun publishPointValue(pv: PointValue)
+        = rabbitTemplate.convertAndSend("scada_test", "values", pv)
+
+//    fun
+
+    // DataSources (toggle:enable-disable)
+
+
 }

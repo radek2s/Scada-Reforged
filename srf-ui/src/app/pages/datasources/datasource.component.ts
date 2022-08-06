@@ -58,4 +58,8 @@ export default class DataSourceComponent {
     enable(ds: VirtualDataSource) {
         this.dsService.initDS(ds.id, "VIRTUAL")
     }
+
+    start(ds: VirtualDataSource) {
+        this.dsService.initRT(ds.id)
+    }
 }

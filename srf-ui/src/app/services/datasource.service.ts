@@ -35,4 +35,8 @@ export default class DataSourceService {
     public async getValues(dsId: number, dpId: number) {
         return await this.http.get(`/api/v1/pv?dsId=${dsId}&dpId=${dpId}`, { headers: this.authService.getHeaders() }).toPromise()
     }
+
+    public async initRT(dsId: number) {
+        return await this.http.get(`${this.dataSourceApi}/${dsId}/inite`, { headers: this.authService.getHeaders() }).toPromise()
+    }
 }
