@@ -24,15 +24,7 @@ class DataSourcesController(
             .map { ResponseEntity.ok(it) }
             .orElse(ResponseEntity.notFound().build())
 
-    @GetMapping(value = ["/{id}/init"])
-    fun initById(@PathVariable id: Int, @RequestParam(value = "t") type: String): ResponseEntity<String>? =
-        datasourceService.initRT(id, ScadaDataSourceType.valueOf(type))
-            .let { ResponseEntity.ok("OK") }
 
-    @GetMapping(value = ["/{id}/inite"])
-    fun initEById(@PathVariable id: Int): ResponseEntity<String>? =
-        datasourceService.enableRT(id)
-            .let { ResponseEntity.ok("OK") }
 
     //TODO: Consider how to implement this communication in a clear way
     // Now DS has to be enabled: localhost:8081/api/v1/runner/8/enable

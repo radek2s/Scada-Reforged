@@ -23,10 +23,31 @@
 
               <section>
                 <div *ngFor="let item of dsList">
-                    <p>{{item.name}}</p>
-                    <button mat-button (click)="this.createDp(item)">Add DP</button>
+                    <p>{{item.name}} Enabled: {{item.enabled}}</p>
+                    
                     <button mat-button (click)="this.enable(item)">Enable</button>
-                    <button mat-button (click)="this.start(item)">Start</button>
+                    <button mat-button (click)="this.disable(item)">Disable</button>
+                    <div *ngFor="let dp of item.datapoints">
+                      <p>Name: {{dp.name}}</p>
+                      <p>State: {{dp.enabled}}</p>
+                      <button mat-button (click)="this.toggleDPState(item, dp)">Toggle dp</button>
+                    </div>
+                    <div>
+                      <h3>DataPoint creator</h3>
+                      <mat-form-field appearance="fill">
+                        <mat-label>Name</mat-label>
+                        <input type="text" matInput  [(ngModel)]="dp.name">
+                      </mat-form-field>
+                      <mat-form-field appearance="fill">
+                        <mat-label>Min value</mat-label>
+                        <input type="number" matInput  [(ngModel)]="dp.minValue">
+                      </mat-form-field>
+                      <mat-form-field appearance="fill">
+                        <mat-label>Max value</mat-label>
+                        <input type="number" matInput  [(ngModel)]="dp.maxValue">
+                      </mat-form-field>
+                      <button mat-button (click)="this.createDp(item)">Add DP</button>
+                    </div>
                 </div>
               </section>
 

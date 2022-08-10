@@ -3,6 +3,7 @@ package org.reggster.srfcore.domain.acquisition
 import org.reggster.srfcommons.acquisition.ScadaDataSourceType
 import org.reggster.srfcore.domain.acquisition.virtual.DataPointVirtualEntity
 import org.reggster.srfcore.domain.acquisition.virtual.DataSourceVirtualServiceImplEntity
+import org.reggster.srfcore.domain.control.DataSourcesRuntimeServices
 import org.reggster.srfcore.security.acl.ScadaUserService
 import org.springframework.context.ApplicationContext
 import org.springframework.security.acls.domain.BasePermission
@@ -16,7 +17,7 @@ import java.util.*
 class ScadaDataSourceEntityServiceImpl(
     val ctx: ApplicationContext,
     private val userService: ScadaUserService,
-    private val runtimeDsService: RuntimeDataSourceServices
+    private val runtimeDsService: DataSourcesRuntimeServices
 ) {
 
     fun findAll(): List<ScadaDataSourceEntity> {
@@ -33,10 +34,24 @@ class ScadaDataSourceEntityServiceImpl(
         getServiceBean(type).findById(entityId)
 
     fun delete(entityId: Int, type: ScadaDataSourceType) =
-        getServiceBean(type).delete(entityId)
+        getServiceBean(type).delete(entityId).let {
+            runtimeDsService.disableDataSource(entityId, type)
+        }
 
     fun create(entity: ScadaDataSourceEntity, principal: Principal): ScadaDataSourceEntity =
         getServiceBean(entity.type).create(entity).also { addBasicPermissions(it, principal) }
+
+    fun enable(dsId: Int, type: ScadaDataSourceType) = findById(dsId, type).ifPresent {
+        runtimeDsService.enableDataSource(it) //TODO if that will throw an error do not change the state of DS
+        it.enabled = true
+        getServiceBean(it.type).save(it)
+    }
+    fun disable(id: Int, type: ScadaDataSourceType) = findById(id, type).ifPresent {
+        runtimeDsService.disableDataSource(id, type)
+        it.enabled = false
+        getServiceBean(it.type).save(it)
+
+    }
 
     fun createDataPoint(dsId: Int, type: ScadaDataSourceType, entity: DataPointVirtualEntity, principal: Principal): ScadaDataSourceEntity {
         val ds = findById(dsId, type).get()
@@ -45,13 +60,11 @@ class ScadaDataSourceEntityServiceImpl(
         return ds
     }
 
-    fun initRT(dsId: Int, type: ScadaDataSourceType) {
-        val ds = findById(dsId, type).get()
-        runtimeDsService.initDataSource(ds)
+    fun setDataPointState(dsId: Int, type: ScadaDataSourceType, dpId: Int, enabled: Boolean) {
+        runtimeDsService.setDataPointState(dsId, type, dpId, enabled)
     }
 
-    fun enableRT(id: Int) =
-        runtimeDsService.enableDataSource(id)
+
 
     fun addRTDataPoints(dsId: Int, type: ScadaDataSourceType) {
 

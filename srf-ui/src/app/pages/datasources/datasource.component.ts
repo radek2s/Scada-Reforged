@@ -1,7 +1,7 @@
 import { Component, OnInit } from "@angular/core";
 import AuthenticationService from "src/app/auth/auth.service";
 import DataSourceService from "src/app/services/datasource.service";
-import { VirtualDataSource } from "../datasources/virtual";
+import { VirtualDataPoint, VirtualDataSource } from "../datasources/virtual";
 
 @Component({
     selector: 'ds-component',
@@ -11,6 +11,7 @@ export default class DataSourceComponent {
 
     ds: VirtualDataSource
     dsList: VirtualDataSource[] = []
+    dp: VirtualDataPoint
 
     username: string = ''
     password: string = ''
@@ -20,6 +21,7 @@ export default class DataSourceComponent {
         private authService: AuthenticationService
     ) { 
         this.ds = new VirtualDataSource("Example")
+        this.dp = new VirtualDataPoint("DP_01", 0 , 20)
         this.loadDS()
     }
 
@@ -42,24 +44,26 @@ export default class DataSourceComponent {
     }
 
     createDp(ds: VirtualDataSource) {
-        const dp = {
-            sid: "DSP",
-            name: "DP_0",
-            enabled: true,
-            settable: true,
-            dataType: 0,
-            changeType: 0,
-            minValue: 0,
-            maxValue: 20
-        }
-        this.dsService.addDP(ds.id, "VIRTUAL", dp)
+        this.dsService.addDP(ds.id, "VIRTUAL", this.dp)
     }
 
     enable(ds: VirtualDataSource) {
-        this.dsService.initDS(ds.id, "VIRTUAL")
+        const data = this.dsList.find(datasource => datasource.id === ds.id)
+        if(data) { data.enabled = true }
+        this.dsService.enable(ds.id, "VIRTUAL")
     }
 
-    start(ds: VirtualDataSource) {
-        this.dsService.initRT(ds.id)
+    disable(ds: VirtualDataSource) {
+        const data = this.dsList.find(datasource => datasource.id === ds.id)
+        if(data) { data.enabled = false }
+        this.dsService.disable(ds.id, "VIRTUAL")
+    }
+
+    toggleDPState(ds: VirtualDataSource, dp: any) {
+        const res = ds.datapoints.find(d => d.id == dp.id)
+        if(res) {
+            res.enabled = !res.enabled
+            this.dsService.setDataPointState(ds.id, "VIRTUAL", dp.id, res.enabled)
+        }
     }
 }
