@@ -20,17 +20,17 @@ class ScadaDataSourceEntityServiceImpl(
     private val runtimeDsService: DataSourcesRuntimeServices
 ) {
 
-    fun findAll(): List<ScadaDataSourceEntity> {
-        val dsList: MutableList<ScadaDataSourceEntity> = mutableListOf()
+    fun findAll(): List<ScadaDataSourceEntity<ScadaDataPointEntity>> {
+        val dsList: MutableList<ScadaDataSourceEntity<ScadaDataPointEntity>> = mutableListOf()
         getAllServiceBeans().forEach { dsList.addAll(it.findAll()) }
         return dsList.toList()
     }
 
     @Transactional
-    fun save(entity: ScadaDataSourceEntity, principal: Principal): ScadaDataSourceEntity =
+    fun save(entity: ScadaDataSourceEntity<ScadaDataPointEntity>, principal: Principal): ScadaDataSourceEntity<ScadaDataPointEntity> =
         getServiceBean(entity.type).save(entity)
 
-    fun findById(entityId: Int, type: ScadaDataSourceType): Optional<ScadaDataSourceEntity> =
+    fun findById(entityId: Int, type: ScadaDataSourceType): Optional<ScadaDataSourceEntity<ScadaDataPointEntity>> =
         getServiceBean(type).findById(entityId)
 
     fun delete(entityId: Int, type: ScadaDataSourceType) =
@@ -38,7 +38,7 @@ class ScadaDataSourceEntityServiceImpl(
             runtimeDsService.disableDataSource(entityId, type)
         }
 
-    fun create(entity: ScadaDataSourceEntity, principal: Principal): ScadaDataSourceEntity =
+    fun create(entity: ScadaDataSourceEntity<ScadaDataPointEntity>, principal: Principal): ScadaDataSourceEntity<ScadaDataPointEntity> =
         getServiceBean(entity.type).create(entity).also { addBasicPermissions(it, principal) }
 
     fun enable(dsId: Int, type: ScadaDataSourceType) = findById(dsId, type).ifPresent {
@@ -53,11 +53,27 @@ class ScadaDataSourceEntityServiceImpl(
 
     }
 
-    fun createDataPoint(dsId: Int, type: ScadaDataSourceType, entity: DataPointVirtualEntity, principal: Principal): ScadaDataSourceEntity {
+    fun createDataPoint(dsId: Int, type: ScadaDataSourceType, entity: DataPointVirtualEntity, principal: Principal): ScadaDataSourceEntity<ScadaDataPointEntity> {
         val ds = findById(dsId, type).get()
         ds.datapoints?.add(entity)
         save(ds, principal)
+        try {
+            runtimeDsService.addDataPoint(dsId, type, entity)
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
         return ds
+    }
+
+    fun removeDataPoint(dsId: Int, type: ScadaDataSourceType, dpId: Int, principal: Principal) {
+        runtimeDsService.deleteDataPoint(dsId, type, dpId)
+        findById(dsId, type).ifPresent {
+            val dp = it.datapoints?.find { d -> d.id == dpId }
+            if (dp != null) {
+                it.datapoints?.remove(dp)
+            }
+            save(it, principal)
+        }
     }
 
     fun setDataPointState(dsId: Int, type: ScadaDataSourceType, dpId: Int, enabled: Boolean) {
@@ -71,20 +87,20 @@ class ScadaDataSourceEntityServiceImpl(
     }
 
     // --- DATA-SOURCES DEFINITIONS :: Extend in this place --- //
-    private fun getServiceBean(type: ScadaDataSourceType): ScadaDataSourceEntityService<ScadaDataSourceEntity> =
+    private fun getServiceBean(type: ScadaDataSourceType): ScadaDataSourceEntityService<ScadaDataSourceEntity<ScadaDataPointEntity>> =
         when (type) {
-            ScadaDataSourceType.VIRTUAL -> (ctx.getBean(DataSourceVirtualServiceImplEntity::class.java) as ScadaDataSourceEntityService<ScadaDataSourceEntity>)
+            ScadaDataSourceType.VIRTUAL -> (ctx.getBean(DataSourceVirtualServiceImplEntity::class.java) as ScadaDataSourceEntityService<ScadaDataSourceEntity<ScadaDataPointEntity>>)
 
 //            DataSourceType.OTHER -> ctx.getBean(DataSourceOtherServiceImpl::class.java) as ScadaDataSourceService<ScadaDataSource, Int>
         }
 
-    private fun getAllServiceBeans(): List<ScadaDataSourceEntityService<ScadaDataSourceEntity>> =
+    private fun getAllServiceBeans(): List<ScadaDataSourceEntityService<ScadaDataSourceEntity<ScadaDataPointEntity>>> =
         listOf(
-            ctx.getBean(DataSourceVirtualServiceImplEntity::class.java) as ScadaDataSourceEntityService<ScadaDataSourceEntity>,
+            ctx.getBean(DataSourceVirtualServiceImplEntity::class.java) as ScadaDataSourceEntityService<ScadaDataSourceEntity<ScadaDataPointEntity>>,
 //            ctx.getBean(DataSourceOtherServiceImpl::class.java) as ScadaDataSourceService<ScadaDataSource, Int>
         )
 
-    private fun addBasicPermissions(datasource: ScadaDataSourceEntity, principal: Principal) =
+    private fun addBasicPermissions(datasource: ScadaDataSourceEntity<ScadaDataPointEntity>, principal: Principal) =
         userService.addPermission(PrincipalSid(principal.name), datasource.javaClass, datasource.id.toLong(), listOf(BasePermission.READ, BasePermission.WRITE))
 
 

@@ -14,10 +14,18 @@ export default class AuthenticationService {
 
     constructor(
         private http: HttpClient,
-    ) { }
+    ) { this.init() }
 
     public isLogged(): boolean {
         return !!this.loggedUser
+    }
+
+    private init() {
+        const token = sessionStorage.getItem("token")
+        if(token) {
+            this.loggedUser = jwtDecode<JwtPayload>(token).sub
+            this.accessToken = token
+        }
     }
 
     public async login(username: string, password: string) {        
@@ -29,6 +37,7 @@ export default class AuthenticationService {
     public saveToken(token: string) {
         if(token == '') { console.warn("Not logged!")}
         this.accessToken = token
+        sessionStorage.setItem("token", this.accessToken)
 
         try {
             this.loggedUser = jwtDecode<JwtPayload>(token).sub

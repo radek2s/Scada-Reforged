@@ -31,7 +31,7 @@ export class VirtualDataPoint {
     name: string
     enabled: boolean
     settable: boolean
-    dataType: number
+    dataType: string
     changeType: number
     minValue: number
     maxValue: number
@@ -41,7 +41,7 @@ export class VirtualDataPoint {
         this.name = name
         this.enabled = false
         this.settable = true
-        this.dataType = 0
+        this.dataType = 'INTEGER'
         this.changeType = 0
         this.minValue = min
         this.maxValue = max

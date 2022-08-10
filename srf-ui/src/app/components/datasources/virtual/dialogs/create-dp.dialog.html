@@ -1,0 +1,26 @@
+<h1 mat-dialog-title class="flex-center-vertical position-relative">
+    <div>
+        Create Virtual DataPoint
+    </div>
+</h1>
+<div mat-dialog-content class="flex column">
+    <div>
+        <mat-form-field appearance="fill">
+            <mat-label>Name</mat-label>
+            <input type="text" matInput [(ngModel)]="datapoint.name">
+        </mat-form-field>
+        <mat-form-field appearance="fill">
+            <mat-label>Min value</mat-label>
+            <input type="text" matInput [(ngModel)]="datapoint.minValue">
+        </mat-form-field>
+        <mat-form-field appearance="fill">
+            <mat-label>Max value</mat-label>
+            <input type="number" matInput [(ngModel)]="datapoint.maxValue">
+        </mat-form-field>
+    </div>
+</div>
+
+<div mat-dialog-actions>
+    <button mat-button mat-dialog-close>No</button>
+    <button mat-button cdkFocusInitial (click)="save()">Ok</button>
+</div>

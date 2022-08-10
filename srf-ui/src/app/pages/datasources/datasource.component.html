@@ -1,62 +1,45 @@
 
 
-<div class="login-wrapper">
-    <mat-card class="login-card">
-        <mat-card-title>Create VDS</mat-card-title>
-        <mat-card-content class="login-box">
-            <mat-form-field appearance="fill">
-                <mat-label>description</mat-label>
-                <input type="text" matInput  [(ngModel)]="ds.name">
-              </mat-form-field>
-              <mat-form-field appearance="fill">
-                <mat-label>ScadaID</mat-label>
-                <input type="text" matInput  [(ngModel)]="ds.sid">
-              </mat-form-field>
-              <mat-form-field appearance="fill">
-                <mat-label>Update Period</mat-label>
-                <input type="number" matInput  [(ngModel)]="ds.updatePeriod">
-              </mat-form-field>
-              <mat-form-field appearance="fill">
-                <mat-label>Update Period Type</mat-label>
-                <input type="number" matInput  [(ngModel)]="ds.updatePeriodType">
-              </mat-form-field>
+<h1>DataSources</h1>
+<mat-accordion class="example-headers-align" multi>
+  <mat-expansion-panel *ngFor="let datasource of dsList">
+    <mat-expansion-panel-header>
+      <mat-panel-title>
+        <mat-icon [color]="datasource.enabled == true ? 'primary': 'error'">hive</mat-icon>  
+         {{datasource.name}}
+      </mat-panel-title>
+      <mat-panel-description>
+        <span>{{datasource.updatePeriod}} -</span>
+        <span>{{datasource.updatePeriodType}}</span>
+        
+      </mat-panel-description>
+    </mat-expansion-panel-header>
 
-              <section>
-                <div *ngFor="let item of dsList">
-                    <p>{{item.name}} Enabled: {{item.enabled}}</p>
-                    
-                    <button mat-button (click)="this.enable(item)">Enable</button>
-                    <button mat-button (click)="this.disable(item)">Disable</button>
-                    <div *ngFor="let dp of item.datapoints">
-                      <p>Name: {{dp.name}}</p>
-                      <p>State: {{dp.enabled}}</p>
-                      <button mat-button (click)="this.toggleDPState(item, dp)">Toggle dp</button>
-                    </div>
-                    <div>
-                      <h3>DataPoint creator</h3>
-                      <mat-form-field appearance="fill">
-                        <mat-label>Name</mat-label>
-                        <input type="text" matInput  [(ngModel)]="dp.name">
-                      </mat-form-field>
-                      <mat-form-field appearance="fill">
-                        <mat-label>Min value</mat-label>
-                        <input type="number" matInput  [(ngModel)]="dp.minValue">
-                      </mat-form-field>
-                      <mat-form-field appearance="fill">
-                        <mat-label>Max value</mat-label>
-                        <input type="number" matInput  [(ngModel)]="dp.maxValue">
-                      </mat-form-field>
-                      <button mat-button (click)="this.createDp(item)">Add DP</button>
-                    </div>
-                </div>
-              </section>
+    <div>
+      <button mat-button (click)="this.enable(datasource)">Enable</button>
+      <button mat-button (click)="this.disable(datasource)">Disable</button>
+      <mat-icon>edit</mat-icon>
+    </div>
 
-              
-            
-        </mat-card-content>
-        <mat-card-actions>
-            <button mat-button (click)="this.generateNew()">Generate</button>
-            <button mat-button (click)="this.createDs()">Send</button>
-        </mat-card-actions>
-    </mat-card>
-</div>
+    <mat-list>
+      <mat-list-item *ngFor="let dp of datasource.datapoints">
+        <button mat-icon-button [color]="dp.enabled == true ? 'primary' : 'warn'" (click)="this.toggleDPState(datasource, dp)">
+          <mat-icon>hive</mat-icon>
+        </button>
+        <div mat-line>{{dp.name}}</div>
+        <button mat-button>Remove</button>
+      </mat-list-item>
+      <mat-list-item>
+        <button mat-mini-fab (click)="openCreateDataPointDialog(datasource)">
+          <mat-icon>add</mat-icon>
+        </button>
+        <!-- <button mat-button (click)="openCreateDataPointDialog(datasource)">Create</button> -->
+      </mat-list-item>
+    </mat-list>
+  </mat-expansion-panel>
+</mat-accordion>
+
+<button mat-fab (click)="openCreateDataSourceDialog()">
+  <mat-icon>add</mat-icon>
+</button>
+

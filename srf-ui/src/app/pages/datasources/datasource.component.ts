@@ -1,7 +1,10 @@
-import { Component, OnInit } from "@angular/core";
+import { Component } from "@angular/core";
+import { MatDialog } from "@angular/material/dialog";
 import AuthenticationService from "src/app/auth/auth.service";
+import CreateDataPointVirtualDialog from "src/app/components/datasources/virtual/dialogs/create-dp.component";
+import CreateDataSourceVirtualDialog from "src/app/components/datasources/virtual/dialogs/create-ds.component";
 import DataSourceService from "src/app/services/datasource.service";
-import { VirtualDataPoint, VirtualDataSource } from "../datasources/virtual";
+import { VirtualDataSource } from "../datasources/virtual";
 
 @Component({
     selector: 'ds-component',
@@ -9,24 +12,14 @@ import { VirtualDataPoint, VirtualDataSource } from "../datasources/virtual";
 })
 export default class DataSourceComponent {
 
-    ds: VirtualDataSource
     dsList: VirtualDataSource[] = []
-    dp: VirtualDataPoint
-
-    username: string = ''
-    password: string = ''
 
     constructor(
         private dsService: DataSourceService,
-        private authService: AuthenticationService
+        private authService: AuthenticationService,
+        private dialog: MatDialog
     ) { 
-        this.ds = new VirtualDataSource("Example")
-        this.dp = new VirtualDataPoint("DP_01", 0 , 20)
         this.loadDS()
-    }
-
-    generateNew() {
-        this.ds = new VirtualDataSource("New")
     }
 
     loadDS() {
@@ -35,16 +28,26 @@ export default class DataSourceComponent {
         })
     }
 
-    
-
-    createDs(): void {
-        this.dsService.createDataSource(this.ds).then((r) => {
-            console.log(r)
+    openCreateDataSourceDialog() {
+        const dialogRef = this.dialog.open(CreateDataSourceVirtualDialog);
+        dialogRef.afterClosed().subscribe(result => {
+            if(result) {
+                this.dsService.createDataSource(result).then(() => {
+                    this.loadDS()
+                })
+            }
         })
     }
 
-    createDp(ds: VirtualDataSource) {
-        this.dsService.addDP(ds.id, "VIRTUAL", this.dp)
+    openCreateDataPointDialog(ds: VirtualDataSource) {
+        const dialogRef = this.dialog.open(CreateDataPointVirtualDialog);
+        dialogRef.afterClosed().subscribe(result => {
+            if(result) {
+                this.dsService.addDP(ds.id, "VIRTUAL", result).then(() => {
+                    this.loadDS()
+                })
+            }
+        })
     }
 
     enable(ds: VirtualDataSource) {

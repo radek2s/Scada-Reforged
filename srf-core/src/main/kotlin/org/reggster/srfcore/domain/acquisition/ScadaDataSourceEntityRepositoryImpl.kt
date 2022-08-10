@@ -16,7 +16,7 @@ import java.util.*
  */
 @Service
 @Transactional
-abstract class ScadaDataSourceEntityRepositoryImpl<T: ScadaDataSourceEntity, ID: java.io.Serializable>(
+abstract class ScadaDataSourceEntityRepositoryImpl<T: ScadaDataSourceEntity<*>, ID: java.io.Serializable>(
     private val scadaDataSourceEntityRepository: ScadaDataSourceEntityRepository<T, ID>
 ): ScadaDataSourceService<T, ID> {
 

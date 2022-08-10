@@ -1,0 +1,30 @@
+<h1 mat-dialog-title class="flex-center-vertical position-relative">
+    <div>
+        Create Virtual DataSource
+    </div>
+</h1>
+<div mat-dialog-content class="flex column">
+    <div>
+        <mat-form-field appearance="fill">
+            <mat-label>Name</mat-label>
+            <input type="text" matInput [(ngModel)]="datasource.name">
+        </mat-form-field>
+        <mat-form-field appearance="fill">
+            <mat-label>ScadaID</mat-label>
+            <input type="text" matInput [(ngModel)]="datasource.sid">
+        </mat-form-field>
+        <mat-form-field appearance="fill">
+            <mat-label>Update Period</mat-label>
+            <input type="number" matInput [(ngModel)]="datasource.updatePeriod">
+        </mat-form-field>
+        <mat-form-field appearance="fill">
+            <mat-label>Update Period Type</mat-label>
+            <input type="number" matInput [(ngModel)]="datasource.updatePeriodType">
+        </mat-form-field>
+    </div>
+</div>
+
+<div mat-dialog-actions>
+    <button mat-button mat-dialog-close>No</button>
+    <button mat-button cdkFocusInitial (click)="save()">Ok</button>
+</div>

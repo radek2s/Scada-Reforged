@@ -6,5 +6,5 @@ interface ScadaDataPoint {
     var name: String
     var enabled: Boolean
     var settable: Boolean
-    var dataType: Int
+    var dataType: DataPointType
 }

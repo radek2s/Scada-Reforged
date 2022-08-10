@@ -11,6 +11,8 @@ import LoginComponent from './pages/login/login.component';
 import { MaterialModule } from './material.module';
 import AmChartComponent from './components/chart/amchart.component';
 import DataSourceComponent from './pages/datasources/datasource.component';
+import CreateDataSourceVirtualDialog from './components/datasources/virtual/dialogs/create-ds.component';
+import CreateDataPointVirtualDialog from './components/datasources/virtual/dialogs/create-dp.component';
 
 @NgModule({
   declarations: [
@@ -18,7 +20,9 @@ import DataSourceComponent from './pages/datasources/datasource.component';
     HomeComponent,
     LoginComponent,
     AmChartComponent,
-    DataSourceComponent
+    DataSourceComponent,
+    CreateDataSourceVirtualDialog,
+    CreateDataPointVirtualDialog
   ],
   imports: [
     FormsModule,

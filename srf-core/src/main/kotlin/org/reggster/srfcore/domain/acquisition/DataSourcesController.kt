@@ -13,13 +13,13 @@ class DataSourcesController(
 ) {
 
     @GetMapping(value = [""])
-    fun getAll(): ResponseEntity<List<ScadaDataSourceEntity>> =
+    fun getAll(): ResponseEntity<List<ScadaDataSourceEntity<ScadaDataPointEntity>>> =
         datasourceService.findAll().let {
             ResponseEntity.ok(it)
         }
 
     @GetMapping(value = ["/{id}"])
-    fun findById(@PathVariable id: Int, @RequestParam(value = "t") type: String): ResponseEntity<ScadaDataSourceEntity>? =
+    fun findById(@PathVariable id: Int, @RequestParam(value = "t") type: String): ResponseEntity<ScadaDataSourceEntity<ScadaDataPointEntity>>? =
         datasourceService.findById(id, ScadaDataSourceType.valueOf(type))
             .map { ResponseEntity.ok(it) }
             .orElse(ResponseEntity.notFound().build())
@@ -30,26 +30,32 @@ class DataSourcesController(
     // Now DS has to be enabled: localhost:8081/api/v1/runner/8/enable
 
     @PutMapping(value = ["/{id}"])
-    fun update(@RequestBody datasource: ScadaDataSourceEntity, principal: Principal): ResponseEntity<ScadaDataSourceEntity> =
+    fun update(@RequestBody datasource: ScadaDataSourceEntity<ScadaDataPointEntity>, principal: Principal): ResponseEntity<ScadaDataSourceEntity<ScadaDataPointEntity>> =
         datasourceService.save(datasource, principal).let {
             ResponseEntity.ok(it)
         }
 
     @PostMapping(value = [""])
-    fun create(@RequestBody datasource: ScadaDataSourceEntity, principal: Principal): ResponseEntity<ScadaDataSourceEntity> =
+    fun create(@RequestBody datasource: ScadaDataSourceEntity<ScadaDataPointEntity>, principal: Principal): ResponseEntity<ScadaDataSourceEntity<ScadaDataPointEntity>> =
         datasourceService.create(datasource, principal).let {
-            ResponseEntity.ok(it)
-        }
-
-    @PostMapping(value = ["/{id}"])
-    fun addDataPoint(@PathVariable id: Int, @RequestParam(value = "t") type: String, @RequestBody datapoint: DataPointVirtualEntity, principal: Principal): ResponseEntity<ScadaDataSourceEntity> =
-        datasourceService.createDataPoint(id, ScadaDataSourceType.valueOf(type), datapoint, principal).let {
             ResponseEntity.ok(it)
         }
 
     @DeleteMapping(value = ["/{id}"])
     fun delete(@PathVariable id: Int, @RequestParam(value = "t") type: String): ResponseEntity<String> =
         datasourceService.delete(id, ScadaDataSourceType.valueOf(type)).let {
+            ResponseEntity.ok("Deleted")
+        }
+
+    @PostMapping(value = ["/{id}"])
+    fun addDataPoint(@PathVariable id: Int, @RequestParam(value = "t") type: String, @RequestBody datapoint: DataPointVirtualEntity, principal: Principal): ResponseEntity<ScadaDataSourceEntity<ScadaDataPointEntity>> =
+        datasourceService.createDataPoint(id, ScadaDataSourceType.valueOf(type), datapoint, principal).let {
+            ResponseEntity.ok(it)
+        }
+
+    @DeleteMapping(value = ["/{dsId}/{dpId}"])
+    fun removeDataPoint(@PathVariable dsId: Int, @PathVariable dpId: Int, @RequestParam(value = "t") type: String, principal: Principal): ResponseEntity<String> =
+        datasourceService.removeDataPoint(dsId, ScadaDataSourceType.valueOf(type), dpId, principal).let {
             ResponseEntity.ok("Deleted")
         }
 

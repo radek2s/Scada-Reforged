@@ -16,7 +16,7 @@ import javax.persistence.*
 )
 @MappedSuperclass
 @Inheritance(strategy = InheritanceType.JOINED)
-abstract class ScadaDataSourceEntity(
+abstract class ScadaDataSourceEntity<T : ScadaDataPointEntity>(
     override val type: ScadaDataSourceType,
     @Id @GeneratedValue
     override var id: Int = 0,
@@ -27,13 +27,6 @@ abstract class ScadaDataSourceEntity(
     override var updatePeriodType: Int = 2
 ) : ScadaDataSource {
 
-    @Embedded
-    @ElementCollection(fetch = FetchType.EAGER)
-    @OneToMany(cascade = [CascadeType.ALL])
-    @JoinColumn(name = "dp_id")
-    @AttributeOverrides(
-        AttributeOverride(name="id", column =  Column(name="dp_id"))
-    )
-    var datapoints: MutableList<DataPointVirtualEntity>? = null
+    abstract var datapoints: MutableList<T>?
 
 }

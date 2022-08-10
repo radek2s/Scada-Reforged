@@ -12,17 +12,17 @@ class DataSourcesRuntimeController(
 ) {
 
     @GetMapping(value = ["/{id}/enable"])
-    fun initById(@PathVariable id: Int, @RequestParam(value = "t") type: String): ResponseEntity<String>? =
+    fun enableDataSourceRuntime(@PathVariable id: Int, @RequestParam(value = "t") type: String): ResponseEntity<String>? =
         datasourceService.enable(id, ScadaDataSourceType.valueOf(type))
             .let { ResponseEntity.ok("OK") }
 
     @GetMapping(value = ["/{id}/disable"])
-    fun initEById(@PathVariable id: Int, @RequestParam(value = "t") type: String): ResponseEntity<String>? =
+    fun disableDataSourceRuntime(@PathVariable id: Int, @RequestParam(value = "t") type: String): ResponseEntity<String>? =
         datasourceService.disable(id, ScadaDataSourceType.valueOf(type))
             .let { ResponseEntity.ok("OK") }
 
     @GetMapping(value = ["/{dsId}/{dpId}"])
-    fun setDPState(@PathVariable dsId: Int, @PathVariable dpId: Int, @RequestParam(value = "t") type: String, @RequestParam enabled: Boolean): ResponseEntity<String>? =
+    fun setStateDataPointRuntime(@PathVariable dsId: Int, @PathVariable dpId: Int, @RequestParam(value = "t") type: String, @RequestParam enabled: Boolean): ResponseEntity<String>? =
         datasourceService.setDataPointState(dsId, ScadaDataSourceType.valueOf(type), dpId, enabled)
             .let { ResponseEntity.ok("OK") }
 
