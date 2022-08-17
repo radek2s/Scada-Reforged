@@ -2,6 +2,7 @@ package com.reggster.srfds.virtual.model
 
 import com.reggster.srfds.virtual.RabbitMessagePublisher
 import org.reggster.srfcommons.acquisition.ScadaDataSourceType
+import org.reggster.srfcommons.acquisition.TimePeriod
 import org.reggster.srfcommons.acquisition.virtual.DataSourceVirtual
 import org.reggster.srfcommons.async.PointValue
 import java.time.Instant
@@ -13,7 +14,7 @@ class DataSourceVirtualRT(
     override var name: String,
     override var enabled: Boolean,
     override var updatePeriod: Int,
-    override var updatePeriodType: Int,
+    override var updatePeriodType: TimePeriod,
     var datapoints: MutableList<DataPointVirtualRT> = mutableListOf(),
     var value: Int
 ) : DataSourceVirtual, Runnable {

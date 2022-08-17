@@ -43,7 +43,7 @@ class DataSourceThread(
         while (!this.isInterrupted) {
             try {
                 super.run()
-                sleep((dataSource.updatePeriod * dataSource.updatePeriodType * 1_000).toLong())
+                sleep((dataSource.updatePeriod * dataSource.updatePeriodType.multiplier * 1_000).toLong())
             } catch (e: Exception) {
                 println("Stopped DS: $id")
                 interrupt()

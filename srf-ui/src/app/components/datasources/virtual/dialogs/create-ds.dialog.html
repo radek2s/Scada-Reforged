@@ -17,9 +17,14 @@
             <mat-label>Update Period</mat-label>
             <input type="number" matInput [(ngModel)]="datasource.updatePeriod">
         </mat-form-field>
-        <mat-form-field appearance="fill">
+        <mat-form-field>
             <mat-label>Update Period Type</mat-label>
-            <input type="number" matInput [(ngModel)]="datasource.updatePeriodType">
+            <mat-select [(value)]="datasource.updatePeriodType">
+                <mat-option value="SECONDS">Seconds</mat-option>
+                <mat-option value="MINUTES">Minutes</mat-option>
+                <mat-option value="HOURS">Hours</mat-option>
+                <mat-option value="DAYS">Days</mat-option>
+            </mat-select>
         </mat-form-field>
     </div>
 </div>

@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonSubTypes
 import com.fasterxml.jackson.annotation.JsonTypeInfo
 import org.reggster.srfcommons.acquisition.ScadaDataSource
 import org.reggster.srfcommons.acquisition.ScadaDataSourceType
+import org.reggster.srfcommons.acquisition.TimePeriod
 import org.reggster.srfcore.domain.acquisition.virtual.DataPointVirtualEntity
 import org.reggster.srfcore.domain.acquisition.virtual.DataSourceVirtualEntity
 import javax.persistence.*
@@ -24,7 +25,7 @@ abstract class ScadaDataSourceEntity<T : ScadaDataPointEntity>(
     override var name: String = "",
     override var enabled: Boolean = false,
     override var updatePeriod: Int = 1,
-    override var updatePeriodType: Int = 2
+    override var updatePeriodType: TimePeriod = TimePeriod.SECONDS
 ) : ScadaDataSource {
 
     abstract var datapoints: MutableList<T>?

@@ -42,17 +42,19 @@ class InfluxDbService {
     fun getPointValues(dsId: Int, dpId: Int): List<PointValue> {
         try {
 //            val client: InfluxDBClient = InfluxDBClientFactory.create("http://localhost:8086", token.toCharArray(), organization, bucket)
-            val querry: String = "from(bucket: \"${bucket}\") |> range(start: -10d) |> filter(fn: (r) => r._measurement == \"point_values\" and r.datasource == \"${dsId}\" and r.datapoint == \"${dpId}\")"
+            val querry: String = "from(bucket: \"${bucket}\") |> range(start: -1d) |> filter(fn: (r) => r._measurement == \"point_values\" and r.datasource == \"${dsId}\" and r.datapoint == \"${dpId}\")"
             println(querry)
             val results: MutableList<PointValue> = mutableListOf()
             val res = client.queryApi.query(querry)
             res.forEach { iti ->
+
                 iti.records.forEach {
+
                     println("${it.time} ${it.measurement}: ${it.field}=${it.value} DS:${it.getValueByKey("datasource")}")
                     results.add(PointValue(
+                        dsId,
                         dpId,
-                        1,
-                        (it.value as Long).toInt(),
+                        it.value as Double,
                         it.time?.toEpochMilli()
                     ))
                 }
@@ -64,7 +66,7 @@ class InfluxDbService {
         }
     }
 
-    fun savePointValue(dsId: Int, dpId: Int, value: Int, time: Instant?) {
+    fun savePointValue(dsId: Int, dpId: Int, value: Double, time: Instant?) {
         try {
             val t: Instant = time ?: Instant.now()
             val point: Point = Point.measurement("point_values")
@@ -72,7 +74,6 @@ class InfluxDbService {
                 .addTag("datapoint", "$dpId")
                 .addField("value", value)
                 .time(t.toEpochMilli(), WritePrecision.MS)
-
 
             val writeApi: WriteApiBlocking = client.writeApiBlocking
 

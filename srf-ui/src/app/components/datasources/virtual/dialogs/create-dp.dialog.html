@@ -9,6 +9,14 @@
             <mat-label>Name</mat-label>
             <input type="text" matInput [(ngModel)]="datapoint.name">
         </mat-form-field>
+        <mat-form-field>
+            <mat-label>Value type</mat-label>
+            <mat-select [(value)]="datapoint.dataType">
+                <mat-option value="BINARY">Binary</mat-option>
+                <mat-option value="INTEGER">Integer</mat-option>
+                <mat-option value="DOUBLE">Double</mat-option>
+            </mat-select>
+        </mat-form-field>
         <mat-form-field appearance="fill">
             <mat-label>Min value</mat-label>
             <input type="text" matInput [(ngModel)]="datapoint.minValue">

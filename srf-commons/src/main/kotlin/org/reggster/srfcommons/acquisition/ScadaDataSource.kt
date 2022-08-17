@@ -7,5 +7,5 @@ interface ScadaDataSource {
     var name: String
     var enabled: Boolean
     var updatePeriod: Int
-    var updatePeriodType: Int
+    var updatePeriodType: TimePeriod
 }

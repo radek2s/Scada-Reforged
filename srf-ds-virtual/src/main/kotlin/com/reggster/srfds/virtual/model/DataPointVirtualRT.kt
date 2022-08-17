@@ -3,7 +3,6 @@ package com.reggster.srfds.virtual.model
 import org.reggster.srfcommons.acquisition.DataPointType
 import org.reggster.srfcommons.acquisition.virtual.DataPointVirtual
 import kotlin.random.Random
-import kotlin.random.nextInt
 
 class DataPointVirtualRT(
     override var id: Int,
@@ -16,14 +15,14 @@ class DataPointVirtualRT(
     override var minValue: Int,
     override var maxValue: Int
 ) : DataPointVirtual {
-    var value: Int = 0
+    var value: Double = 0.0
 
     fun change() {
         if(!enabled) return
         value = when(dataType) {
-            DataPointType.BINARY -> Random.Default.nextInt(0,1)
-            DataPointType.DOUBLE -> Random.Default.nextInt(minValue, maxValue)
-            DataPointType.INTEGER -> Random.Default.nextInt(minValue, maxValue)
+            DataPointType.BINARY -> when(Random.nextBoolean()) { true -> 1.0; false -> 0.0}
+            DataPointType.INTEGER -> Random.Default.nextInt(minValue, maxValue).toDouble()
+            DataPointType.DOUBLE -> Random.Default.nextDouble(minValue.toDouble(), maxValue.toDouble())
         }
     }
 }

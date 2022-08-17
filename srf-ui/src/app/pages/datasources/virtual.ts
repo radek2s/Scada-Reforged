@@ -6,7 +6,7 @@ export class VirtualDataSource {
     name: string
     enabled: boolean
     updatePeriod: number
-    updatePeriodType: number
+    updatePeriodType: string
     datapoints: any[]
 
     constructor(name: string) {
@@ -15,8 +15,8 @@ export class VirtualDataSource {
         this.sid = ""
         this.name = name
         this.enabled = false
-        this.updatePeriod = 1
-        this.updatePeriodType = 5
+        this.updatePeriod = 5
+        this.updatePeriodType = "SECONDS"
         this.datapoints = []
     }
 
@@ -41,7 +41,7 @@ export class VirtualDataPoint {
         this.name = name
         this.enabled = false
         this.settable = true
-        this.dataType = 'INTEGER'
+        this.dataType = 'DOUBLE'
         this.changeType = 0
         this.minValue = min
         this.maxValue = max
