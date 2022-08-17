@@ -16,6 +16,8 @@
 <div>
     <button mat-button (click)="this.getValues()">Get Values</button>
     <div *ngIf="pointValues">
+        <div>Current value: {{pointValue || "N/A"}}</div>
+
         <amchart-component [data]="pointValues"></amchart-component>
     </div>
     
