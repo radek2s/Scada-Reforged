@@ -12,6 +12,12 @@
     <mat-label>DataPoint ID</mat-label>
     <input type="number" matInput  [(ngModel)]="dpId">
   </mat-form-field>
+  <mat-form-field appearance="fill">
+    <mat-label>DataPoint Tyoe</mat-label>
+    <mat-select [(value)]="dataType">
+      <mat-option value="VIRTUAL">Virtual DataSource</mat-option>
+  </mat-select>
+  </mat-form-field>
 
 <div>
     <button mat-button (click)="this.getValues()">Get Values</button>

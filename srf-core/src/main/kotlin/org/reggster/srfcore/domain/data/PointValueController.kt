@@ -1,5 +1,6 @@
 package org.reggster.srfcore.domain.data
 
+import org.reggster.srfcommons.acquisition.ScadaDataSourceType
 import org.reggster.srfcommons.async.PointValue
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.GetMapping
@@ -17,7 +18,7 @@ class PointValueController(
 ) {
 
     @GetMapping(value = [""])
-    fun getValues(@RequestParam dsId: Int, @RequestParam dpId: Int): ResponseEntity<List<PointValue>> =
-        ResponseEntity.ok(influxDbService.getPointValues(dsId, dpId))
+    fun getValues(@RequestParam dsId: Int, @RequestParam dpId: Int, @RequestParam(value = "t") type: String): ResponseEntity<List<PointValue>> =
+        ResponseEntity.ok(influxDbService.getPointValues(dsId, dpId, ScadaDataSourceType.valueOf(type)))
 
 }

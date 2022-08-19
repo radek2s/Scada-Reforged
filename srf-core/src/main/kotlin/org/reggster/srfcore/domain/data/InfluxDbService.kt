@@ -5,6 +5,7 @@ import com.influxdb.client.InfluxDBClientFactory
 import com.influxdb.client.WriteApiBlocking
 import com.influxdb.client.domain.WritePrecision
 import com.influxdb.client.write.Point
+import org.reggster.srfcommons.acquisition.ScadaDataSourceType
 import org.reggster.srfcommons.async.PointValue
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.stereotype.Service
@@ -39,10 +40,10 @@ class InfluxDbService {
     }
 
 
-    fun getPointValues(dsId: Int, dpId: Int): List<PointValue> {
+    fun getPointValues(dsId: Int, dpId: Int, dsType: ScadaDataSourceType): List<PointValue> {
         try {
 //            val client: InfluxDBClient = InfluxDBClientFactory.create("http://localhost:8086", token.toCharArray(), organization, bucket)
-            val querry: String = "from(bucket: \"${bucket}\") |> range(start: -1d) |> filter(fn: (r) => r._measurement == \"point_values\" and r.datasource == \"${dsId}\" and r.datapoint == \"${dpId}\")"
+            val querry: String = "from(bucket: \"${bucket}\") |> range(start: -1d) |> filter(fn: (r) => r._measurement == \"point_values\" and r.datasource == \"${dsId}\" and r.datapoint == \"${dpId}\" and r.type == \"${dsType.name}\")"
             println(querry)
             val results: MutableList<PointValue> = mutableListOf()
             val res = client.queryApi.query(querry)
@@ -52,6 +53,7 @@ class InfluxDbService {
 
                     println("${it.time} ${it.measurement}: ${it.field}=${it.value} DS:${it.getValueByKey("datasource")}")
                     results.add(PointValue(
+                        dsType,
                         dsId,
                         dpId,
                         it.value as Double,
@@ -66,12 +68,13 @@ class InfluxDbService {
         }
     }
 
-    fun savePointValue(dsId: Int, dpId: Int, value: Double, time: Instant?) {
+    fun savePointValue(type: ScadaDataSourceType, dsId: Int, dpId: Int, value: Double, time: Instant?) {
         try {
             val t: Instant = time ?: Instant.now()
             val point: Point = Point.measurement("point_values")
                 .addTag("datasource", "$dsId")
                 .addTag("datapoint", "$dpId")
+                .addTag("type", type.name)
                 .addField("value", value)
                 .time(t.toEpochMilli(), WritePrecision.MS)
 

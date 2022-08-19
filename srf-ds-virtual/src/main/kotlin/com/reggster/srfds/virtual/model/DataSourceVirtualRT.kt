@@ -45,7 +45,7 @@ class DataSourceVirtualRT(
 
                 println("${name}-${it.name}:${it.value}")
                 messagePublisher?.publishPointValue(PointValue(
-                    id, it.id, it.value, Instant.now().toEpochMilli()
+                    ScadaDataSourceType.VIRTUAL, id, it.id, it.value, Instant.now().toEpochMilli()
                 ))
             }
         }

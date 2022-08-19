@@ -24,8 +24,8 @@ class MessageReceiver(
         try {
             channel.basicAck(tag, false)
             println("Received from: ${value.dpId}")
-            influxDbService.savePointValue(value.dsId, value.dpId, value.value, Instant.ofEpochMilli(value.time!!))
-            wsTemplate.convertAndSend("/topic/values/${value.dsId}/${value.dpId}", value.value)
+            influxDbService.savePointValue(value.dsType, value.dsId, value.dpId, value.value, Instant.ofEpochMilli(value.time!!))
+            wsTemplate.convertAndSend("/topic/values/${value.dsType}/${value.dsId}/${value.dpId}", value.value)
         } catch (e :Exception) {
             channel.basicReject(tag, false)
             e.printStackTrace()

@@ -15,6 +15,7 @@ export default class HomeComponent implements OnInit {
 
     dsId: number = 8
     dpId: number = 1
+    dataType: string = "VIRTUAL"
 
     pointValue?: number
     pointValues?: any[]
@@ -41,10 +42,10 @@ export default class HomeComponent implements OnInit {
     }
 
     getValues() {
-        this.wsService.subscribe(`/topic/values/${this.dsId}/${this.dpId}`, (data: any) => {
+        this.wsService.subscribe(`/topic/values/${this.dataType}/${this.dsId}/${this.dpId}`, (data: any) => {
             this.pointValue = data.body
         })
-        this.dsService.getValues(this.dsId, this.dpId).then((r) => {
+        this.dsService.getValues(this.dsId, this.dpId, this.dataType).then((r) => {
             if(r) {
                 this.pointValues = (r as any[]).map(i => { return {time: new Date(i.time).getTime(), value: i.value }})
             }
