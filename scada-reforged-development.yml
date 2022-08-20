@@ -1,23 +1,6 @@
 version: "3.7"
 services:
 
-  srf-core:
-    image: radek2s/srf-core:latest
-    environment:
-      INFLUXDB_TOKEN: "PP0qzRWa4K0he5EoBzFccWTFBlc0rVlW4Nf6guA9WbrpjdCGISaSpYurcxK7PBtRMtCYSxeA1zfp4zfcf3O50A=="
-    ports:
-      - 8080:8080
-
-  srf-ui:
-    image: radek2s/srf-ui:latest
-    ports:
-      - 4200:80
-
-  srf-ds-virtual:
-    image: radek2s/srf-ds-virtual:latest
-    ports:
-      - 8081:8081
-
   rabbitmq:
     image: rabbitmq:3-management
     ports:
