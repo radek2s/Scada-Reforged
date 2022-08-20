@@ -2,6 +2,7 @@ version: "3.7"
 services:
 
   srf-core:
+    image: radek2s/srf-core:latest
     build:
       context: ./srf-core
     environment:
@@ -10,12 +11,14 @@ services:
       - 8080:8080
 
   srf-ui:
+    image: radek2s/srf-ui:latest
     build:
       context: ./srf-ui
     ports:
       - 4200:80
 
   srf-ds-virtual:
+    image: radek2s/srf-ds-virtual:latest
     build:
       context: ./srf-ds-virtual
     ports:
