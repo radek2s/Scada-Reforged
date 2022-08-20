@@ -3,7 +3,7 @@ server:
 
 spring:
   rabbitmq:
-    host: localhost
+    host: ${RABBITMQ_URL:localhost}
     username: scadareforged
     password: scadareforged
     listener:

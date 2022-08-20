@@ -8,12 +8,11 @@
  * controls to the classic application.
  */
 
-rootProject.name = 'Scada-Reforged'
-include ':scadalts-ui'
+rootProject.name = 'scada-reforged'
 include 'srf-core'
-include 'srf-ds'
-include 'srf-ds-modbus-ip'
-include 'srf-ds-commons'
-include 'srf-ds-virtual'
 include 'srf-commons'
+include 'srf-ds-modbus-ip'
+include 'srf-ds-virtual'
+
+
 

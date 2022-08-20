@@ -2,8 +2,8 @@ server:
   port: 8080
 
 influxdb:
-  url: http://localhost:8086
-  token: NrAjMpE-qgXC6xD15peSINAxWFEgzqxLPSO4l45HcbaLj2k2LFe0apGEzxLwMW187UvC3GK6azCDOCi2heD4hg==
+  url: ${INFLUXDB_URL:http://localhost:8086}
+  token: ${INFLUXDB_TOKEN:_3GcH4taG4cVjFciP7CsQC8eMd-MHQ2r6JHBaM1zLljlk2tKJxvl7Er-0zLwBL6cAluyb4gxzFCsVwtAfCN1kQ==}
   organization: scadareforged
   bucket: datasources
 
@@ -21,7 +21,7 @@ auth0:
 scada:
   service:
     virtual:
-      url: localhost:8081
+      url: ${DS_VIRTUAL_URL:localhost:8081}
 
 logging:
   level:
@@ -59,7 +59,7 @@ spring:
     initialization-mode: always
 
   rabbitmq:
-    host: localhost
+    host: ${RABBITMQ_URL:localhost}
     username: scadareforged
     password: scadareforged
     listener:

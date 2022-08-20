@@ -13,7 +13,7 @@ class RabbitMessagePublisher {
 
     //Publish value
     fun publishPointValue(pv: PointValue)
-        = rabbitTemplate.convertAndSend("scada_test", "values", pv)
+        = rabbitTemplate.convertAndSend("scada_reforged", "values", pv)
 
 //    fun
 

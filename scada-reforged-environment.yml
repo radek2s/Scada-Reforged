@@ -1,6 +1,26 @@
 version: "3.7"
 services:
 
+  srf-core:
+    build:
+      context: ./srf-core
+    environment:
+      INFLUXDB_TOKEN: "PP0qzRWa4K0he5EoBzFccWTFBlc0rVlW4Nf6guA9WbrpjdCGISaSpYurcxK7PBtRMtCYSxeA1zfp4zfcf3O50A=="
+    ports:
+      - 8080:8080
+
+  srf-ui:
+    build:
+      context: ./srf-ui
+    ports:
+      - 4200:80
+
+  srf-ds-virtual:
+    build:
+      context: ./srf-ds-virtual
+    ports:
+      - 8081:8081
+
   rabbitmq:
     image: rabbitmq:3-management
     ports:
