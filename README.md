@@ -47,5 +47,9 @@ To start **Scada Reforged** perform following steps:
 5. Open your browser on page: `localhost:4200`
 6. Login as "admin"/"admin" and check out the pre-alpha version! 🎉 
 
+## 📚 Documentation
 
+Scada-Reforged provide auto-generated REST API documentation in open-api v3.0 standard.
+To download current JSON documentation open `/api/v1/docs` on one of the following
+services: `srf-core` or `srf-ds-virtual`.  
 

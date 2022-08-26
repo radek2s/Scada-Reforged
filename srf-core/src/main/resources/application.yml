@@ -72,3 +72,8 @@ spring:
       password: password
     filter:
       order: 10
+
+springdoc:
+  api-docs:
+    enabled: true
+    path: /api/v1/docs

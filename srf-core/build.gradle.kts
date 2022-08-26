@@ -35,6 +35,9 @@ dependencies {
 	implementation("net.sf.ehcache:ehcache-core:2.6.11")
 	implementation("com.auth0:java-jwt:3.19.2")
 	implementation("com.influxdb:influxdb-client-java:6.3.0")
+	implementation("org.springdoc:springdoc-openapi-ui:1.6.11")
+	runtimeOnly("org.springdoc:springdoc-openapi-kotlin:1.6.11")
+
 	implementation(project(":srf-commons"))
 	implementation(project(":srf-ds-virtual"))
 

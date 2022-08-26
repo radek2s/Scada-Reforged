@@ -9,3 +9,8 @@ spring:
     listener:
       simple:
         acknowledge-mode: manual
+
+springdoc:
+  api-docs:
+    enabled: true
+    path: /api/v1/docs

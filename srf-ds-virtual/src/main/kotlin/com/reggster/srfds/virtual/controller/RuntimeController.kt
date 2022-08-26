@@ -3,6 +3,7 @@ package com.reggster.srfds.virtual.controller
 import com.reggster.srfds.virtual.model.DataPointVirtualRT
 import com.reggster.srfds.virtual.model.DataSourceVirtualRT
 import com.reggster.srfds.virtual.runtime.RuntimeService
+import io.swagger.v3.oas.annotations.Operation
 import org.reggster.srfcommons.external.ExternalServiceResponse
 import org.reggster.srfcommons.external.RuntimeEndpoint
 import org.springframework.http.ResponseEntity
@@ -14,6 +15,7 @@ class RuntimeController(
     private val runtimeService: RuntimeService
 ): RuntimeEndpoint<DataSourceVirtualRT, DataPointVirtualRT> {
 
+    @Operation(summary = "Create RT Entity", description = "Create a running entity of datasource from received definition")
     override fun createRuntimeDataSource(dataSource: DataSourceVirtualRT): ResponseEntity<ExternalServiceResponse> =
         runtimeService.addDataSource(dataSource).let { ResponseEntity.ok(ExternalServiceResponse(200, "Created", null)) }
 
