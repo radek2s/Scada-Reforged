@@ -1,0 +1,13 @@
+<mat-toolbar>
+    <span>Scada Reforged</span>
+</mat-toolbar>
+<mat-drawer-container class="srf-main" [hasBackdrop]="false" autosize>
+    <mat-drawer #drawer mode="side" [ngClass]="isExpanded ? 'oppened' : 'trimmed'" opened="true"
+        (mouseenter)="this.onMouseEnter()" (mouseleave)="this.onMouseLeave()">
+        <main-navbar [isExpanded]="isExpanded">
+        </main-navbar>
+    </mat-drawer>
+    <mat-drawer-content class="srf-contnet">
+        <router-outlet></router-outlet>
+    </mat-drawer-content>
+</mat-drawer-container>

@@ -1,5 +1,6 @@
 import { HttpClient, HttpHeaders } from "@angular/common/http";
 import { Injectable } from "@angular/core";
+import { Router } from "@angular/router";
 import jwtDecode, { JwtPayload } from "jwt-decode";
 
 @Injectable({
@@ -14,6 +15,7 @@ export default class AuthenticationService {
 
     constructor(
         private http: HttpClient,
+        private router: Router
     ) { this.init() }
 
     public isLogged(): boolean {
@@ -32,6 +34,13 @@ export default class AuthenticationService {
         this.http.post(`${this.securityApi}/login?username=${username}&password=${password}`, null, { observe: 'response' }).subscribe(resp => {
             this.saveToken(resp.headers.get("authorization") || '')
         })
+    }
+
+    public async logout() {
+        sessionStorage.removeItem("token")
+        this.loggedUser = undefined
+        this.accessToken = undefined
+        this.router.navigateByUrl("login")
     }
 
     public saveToken(token: string) {

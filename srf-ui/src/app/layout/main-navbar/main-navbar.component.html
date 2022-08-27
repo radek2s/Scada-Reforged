@@ -1,0 +1,14 @@
+<mat-list *ngIf="isLogged()">
+    <mat-list-item routerLink="/home">
+        <mat-icon mat-list-icon>monitor</mat-icon>
+        <div mat-line *ngIf="isExpanded">Dasbhoards</div>
+    </mat-list-item>
+    <mat-list-item routerLink="/datasources">
+        <mat-icon mat-list-icon>storage</mat-icon>
+        <div mat-line *ngIf="isExpanded">DataSources</div>
+    </mat-list-item>
+    <mat-list-item (click)="logout()">
+        <mat-icon mat-list-icon>logout</mat-icon>
+        <div mat-line *ngIf="isExpanded">Logout</div>
+    </mat-list-item>
+</mat-list>

@@ -3,7 +3,7 @@ server:
 
 influxdb:
   url: ${INFLUXDB_URL:http://localhost:8086}
-  token: ${INFLUXDB_TOKEN:_3GcH4taG4cVjFciP7CsQC8eMd-MHQ2r6JHBaM1zLljlk2tKJxvl7Er-0zLwBL6cAluyb4gxzFCsVwtAfCN1kQ==}
+  token: ${INFLUXDB_TOKEN:ajYbXmCiQuVsy0C0eggoICdloTxNpXg-GZl3NivAIldwx5NrMlQxbCxjTu1FPm9-9KSycDkqTVgHWqSKqz0YRg==}
   organization: scadareforged
   bucket: datasources
 

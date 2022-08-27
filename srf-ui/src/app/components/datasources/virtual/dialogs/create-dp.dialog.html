@@ -4,12 +4,12 @@
     </div>
 </h1>
 <div mat-dialog-content class="flex column">
-    <div>
+    <div class="flex-column">
         <mat-form-field appearance="fill">
             <mat-label>Name</mat-label>
             <input type="text" matInput [(ngModel)]="datapoint.name">
         </mat-form-field>
-        <mat-form-field>
+        <mat-form-field appearance="fill">
             <mat-label>Value type</mat-label>
             <mat-select [(value)]="datapoint.dataType">
                 <mat-option value="BINARY">Binary</mat-option>
@@ -29,6 +29,6 @@
 </div>
 
 <div mat-dialog-actions>
-    <button mat-button mat-dialog-close>No</button>
-    <button mat-button cdkFocusInitial (click)="save()">Ok</button>
+    <button mat-flat-button mat-dialog-close>Close</button>
+    <button mat-flat-button color="primary" cdkFocusInitial (click)="save()">Save</button>
 </div>

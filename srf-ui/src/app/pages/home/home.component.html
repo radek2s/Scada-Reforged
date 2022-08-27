@@ -1,10 +1,5 @@
-<h1>
-    Hello User
-</h1>
-
-
-
-<mat-form-field appearance="fill">
+<scada-page title="Dashboards">
+  <mat-form-field appearance="fill">
     <mat-label>DataSource ID</mat-label>
     <input type="number" matInput  [(ngModel)]="dsId">
   </mat-form-field>
@@ -33,3 +28,6 @@
 
 <button (click)="this.loadDs()">Load DS</button>
 <button (click)="this.createDs()">Create DS</button>
+
+</scada-page>
+

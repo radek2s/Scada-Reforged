@@ -1,0 +1,9 @@
+mat-drawer.trimmed {
+    max-width: 64px;   
+    transition: max-width 0.125s ease-in-out;   
+}
+
+mat-drawer.oppened {
+    max-width: 200px;
+    transition: max-width 0.125s ease-in-out;   
+}

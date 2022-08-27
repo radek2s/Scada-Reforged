@@ -1,0 +1,69 @@
+@use "@angular/material" as mat;
+@include mat.core();
+
+
+$srf-palette: (
+    50: #edeef1,
+    100: #d0d6dc,
+    200: #b2bbc5,
+    300: #939fad,
+    400:#7c8b9b,
+    500: #65778a,
+    600: #586879,
+    700: #485563,
+    800: #39434e,
+    900: #272e36,
+    contrast: (
+        50: #39434e,
+        100: #39434e,
+        200: #39434e,
+        300: #39434e,
+        400:#39434e,
+        500: #edeef1,
+        600: #edeef1,
+        700: #edeef1,
+        800: #edeef1,
+        900: #edeef1,
+    )
+);
+
+$srf-accent-palette: (
+    50: #fff9eb,
+    100: #fdeecc,
+    200: #fbe4ad,
+    300: #f8da91,
+    400:#f4d27f,
+    500: #f1cb6f,
+    600: #dfbb69,
+    700: #c8a662,
+    800: #b0925d,
+    900: #857056,
+    contrast: (
+        50: #edeef1,
+        100: #d0d6dc,
+        200: #b2bbc5,
+        300: #939fad,
+        400:#7c8b9b,
+        500: #65778a,
+        600: #586879,
+        700: #edeef1,
+        800: #edeef1,
+        900: #edeef1,
+    )
+);
+
+$srf-primary: mat.define-palette($srf-palette, 500);
+$srf-accent: mat.define-palette($srf-accent-palette, 800);
+$srf-warn: mat.define-palette(mat.$red-palette);
+// $srf-theme: mat.define-light-theme(
+$srf-theme: mat.define-dark-theme(
+    (
+        color: (
+            primary: $srf-primary, 
+            accent: $srf-accent, 
+            warn: $srf-warn,
+        ),
+    )
+);
+
+@include mat.all-component-themes($srf-theme);

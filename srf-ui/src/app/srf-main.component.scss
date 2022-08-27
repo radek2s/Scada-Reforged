@@ -1,0 +1,21 @@
+mat-drawer.oppened {
+    max-width: 200px;
+    transition: max-width 0.125s ease-in-out;   
+}
+
+mat-drawer.trimmed {
+    max-width: 64px;   
+    transition: max-width 0.125s ease-in-out;   
+}
+
+.srf-main {
+    height: calc(100vh - 64px);
+}
+.srf-contnet {
+    // padding: 50px;
+//     background: #16222A;  /* fallback for old browsers */
+// background: -webkit-linear-gradient(to right, #3A6073, #16222A);  /* Chrome 10-25, Safari 5.1-6 */
+// background: linear-gradient(to right, #3A6073, #16222A); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+background-color: none;
+
+}
