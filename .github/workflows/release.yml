@@ -48,9 +48,27 @@ jobs:
           path: ./srf-ds-virtual/build/libs
           key: ${{ runner.os }}-srf-ds-virtual-${{ github.run_id }}
 
+  build-frontend:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: '16'
+          cache: 'npm'
+          cache-dependency-path: srf-ui/package-lock.json
+      - run: npm ci
+        working-directory: srf-ui
+      - run: npm build
+        working-directory: srf-ui
+      - uses: actions/cache@v3
+        with:
+          path: ./srf-ui/dist/srf-ui
+          key: ${{ runner.os }}-srf-ui-${{ github.run_id }}
+
   deploy-docker:
     runs-on: ubuntu-latest
-    needs: [build-backend]
+    needs: [build-backend, build-frontend]
     steps:
       - uses: actions/checkout@v3
       - name: Set version tag
@@ -64,6 +82,10 @@ jobs:
         with:
           path: ./srf-ds-virtual/build/libs
           key: ${{ runner.os }}-srf-ds-virtual-${{ github.run_id }}
+      - uses: actions/cache@v3
+        with:
+          path: ./srf-core/build/libs
+          key: ${{ runner.os }}-srf-ui-${{ github.run_id }}
       - name: Login to Docker Hub
         uses: docker/login-action@v2
         with:
@@ -81,6 +103,12 @@ jobs:
           context: ./srf-ds-virtual
           push: true
           tags: radek2s/srf-ds-virtual:latest, radek2s/srf-ds-virtual:${{ steps.variables.outputs.tag }}
+      - name: Build and push UI
+        uses: docker/build-push-action@v3
+        with:
+          context: ./srf-ui
+          push: true
+          tags: radek2s/srf-ui:latest, radek2s/srf-ui:${{ steps.variables.outputs.tag }}
 
 
 
