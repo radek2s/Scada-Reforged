@@ -21,8 +21,12 @@ jobs:
           cache: 'gradle'
       - name: Setup Gradle
         uses: gradle/gradle-build-action@v2
-      - run: ./gradlew :srf-ds-virtual:bootJar
-      - run: ./gradlew :srf-core:bootJar
+        with:
+          arguments: :srf-core:bootJar
+      - name: Setup Gradle
+        uses: gradle/gradle-build-action@v2
+        with:
+          arguments: :srf-ds-virtual:bootJar
       - name: Upload srf-core.jar
         uses: actions/upload-artifact@v3
         with:
