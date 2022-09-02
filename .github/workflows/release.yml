@@ -59,7 +59,7 @@ jobs:
           cache-dependency-path: srf-ui/package-lock.json
       - run: npm ci
         working-directory: srf-ui
-      - run: npm build
+      - run: npm run build
         working-directory: srf-ui
       - uses: actions/cache@v3
         with:
