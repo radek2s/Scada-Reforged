@@ -19,6 +19,8 @@ jobs:
           java-version: '17'
           distribution: 'corretto'
           cache: 'gradle'
+      - name: Make gradlew executable
+        run: chmod +x ./gradlew
       - run: ./gradlew :srf-ds-virtual:bootJar
       - run: ./gradlew :srf-core:bootJar
       - name: Upload srf-core.jar
