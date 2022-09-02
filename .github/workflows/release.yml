@@ -39,3 +39,48 @@ jobs:
         with:
           name: srf-ds-virtual-${{ steps.variables.outputs.tag }}.jar
           path: ./srf-ds-virtual/build/libs/srf-ds-virtual-*.jar
+      - uses: actions/cache@v3
+        with:
+          path: ./srf-core/build/libs
+          key: ${{ runner.os }}-srf-core-${{ github.run_id }}
+      - uses: actions/cache@v3
+        with:
+          path: ./srf-ds-virtual/build/libs
+          key: ${{ runner.os }}-srf-ds-virtual-${{ github.run_id }}
+
+  deploy-docker:
+    runs-on: ubuntu-latest
+    needs: [build-backend]
+    steps:
+      - uses: actions/checkout@v3
+      - name: Set version tag
+        id: variables
+        run: echo ::set-output name=tag::${GITHUB_REF#refs/*/}
+      - uses: actions/cache@v3
+        with:
+          path: ./srf-core/build/libs
+          key: ${{ runner.os }}-srf-core-${{ github.run_id }}
+      - uses: actions/cache@v3
+        with:
+          path: ./srf-ds-virtual/build/libs
+          key: ${{ runner.os }}-srf-ds-virtual-${{ github.run_id }}
+      - name: Login to Docker Hub
+        uses: docker/login-action@v2
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+      - name: Build and push core
+        uses: docker/build-push-action@v3
+        with:
+          context: ./srf-core
+          push: true
+          tags: radek2s/srf-core:latest, radek2s/srf-core:${{ steps.variables.outputs.tag }}
+      - name: Build and push core
+        uses: docker/build-push-action@v3
+        with:
+          context: ./srf-ds-virtual
+          push: true
+          tags: radek2s/srf-ds-virtual:latest, radek2s/srf-ds-virtual:${{ steps.variables.outputs.tag }}
+
+
+
